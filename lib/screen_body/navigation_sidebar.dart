@@ -1,5 +1,6 @@
 import 'package:bool_chain_v2/screens/log_in_screen.dart';
 import 'package:bool_chain_v2/screens/my_books.dart';
+import 'package:bool_chain_v2/screens/upload_book.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,12 +56,16 @@ class Navigation extends StatelessWidget {
                 ),
                 SizedBox(height: 7),
                 Container(
-                  child: Row(
-                    children: [
-                      Icon(Icons.cloud_upload),
-                      SizedBox(width: 7),
-                      Text('Upload Books', style: ktextStyle),
-                    ],
+                  child: GestureDetector(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => UploadBook())),
+                    child: Row(
+                      children: [
+                        Icon(Icons.cloud_upload),
+                        SizedBox(width: 7),
+                        Text('Upload Book', style: ktextStyle),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 7),
