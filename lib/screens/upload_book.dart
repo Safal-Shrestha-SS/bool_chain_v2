@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bool_chain_v2/services/image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ class UploadBook extends StatefulWidget {
 }
 
 class _UploadBookState extends State<UploadBook> {
-  File imageFile;
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   List<String> _colors = <String>[
     'Action and Adventure',
@@ -48,7 +46,6 @@ class _UploadBookState extends State<UploadBook> {
     'Poetry'
   ];
   List<String> _selected = [];
-  ImageCapture image = ImageCapture();
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ImageCapture>(
@@ -57,10 +54,11 @@ class _UploadBookState extends State<UploadBook> {
         appBar: new AppBar(
           title: new Text('Upload Book'),
         ),
-        body: new SafeArea(
+        body: SafeArea(
             top: false,
             bottom: false,
-            child: Form(
+            child: Consumer<ImageCapture>(builder: (context, image, child) {
+              return Form(
                 key: _formKey,
                 autovalidate: true,
                 child: Stack(
@@ -68,27 +66,21 @@ class _UploadBookState extends State<UploadBook> {
                     ListView(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       children: <Widget>[
-                        if (imageFile != null) ...[
-                          Image.file(imageFile),
+                        if (image.imageFile != null) ...[
+                          Image.file(image.imageFile),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 IconButton(
                                   icon: Icon(Icons.crop),
-                                  onPressed: () {
-                                    setState(() {
-                                      image.cropImage();
-                                      imageFile = image.imageFile;
-                                    });
+                                  onPressed: () async {
+                                    await image.cropImage();
                                   },
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.refresh),
                                   onPressed: () {
-                                    setState(() {
-                                      image.clear();
-                                      imageFile = image.imageFile;
-                                    });
+                                    image.clear();
                                   },
                                 ),
                               ])
@@ -98,20 +90,14 @@ class _UploadBookState extends State<UploadBook> {
                           children: [
                             IconButton(
                               icon: Icon(Icons.photo_camera),
-                              onPressed: () async {
-                                await image.pickImage(ImageSource.camera);
-                                setState(() {
-                                  imageFile = image.imageFile;
-                                });
+                              onPressed: () {
+                                image.pickImage(ImageSource.camera);
                               }, // image.pickImage(ImageSource.camera),
                             ),
                             IconButton(
                               icon: Icon(Icons.photo_library),
-                              onPressed: () {
-                                image.pickImage(ImageSource.gallery);
-                                setState(() {
-                                  imageFile = image.imageFile;
-                                });
+                              onPressed: () async {
+                                await image.pickImage(ImageSource.gallery);
                               },
                             )
                           ],
@@ -222,70 +208,19 @@ class _UploadBookState extends State<UploadBook> {
                         ),
                       ],
                     ),
-                    Consumer<ImageCapture>(
-                      builder: (context, myModel, child) {
-                        return ((myModel.inProgress)
-                            ? Container(
-                                color: Colors.white,
-                                height: double.infinity,
-                                width: double.infinity,
-                                child:
-                                    Center(child: CircularProgressIndicator()),
-                              )
-                            : Center());
-                      },
-                    ),
+                    ((image.inProgress)
+                        ? Container(
+                            color: Colors.white,
+                            height: double.infinity,
+                            width: double.infinity,
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : Center())
                   ],
-                ))),
+                ),
+              );
+            })),
       ),
     );
   }
 }
-
-// class ImageCapture extends StatefulWidget {
-//   @override
-//   _ImageCaptureState createState() => _ImageCaptureState();
-// }
-
-// class _ImageCaptureState extends State<ImageCapture> {
-//   File _imageFile;
-//   Future<void> _pickImage(ImageSource source) async {
-//     File selected = await ImagePicker.pickImage(source: source);
-//     setState(() {
-//       _imageFile = selected;
-//     });
-//   }
-
-//   Future<void> _cropImage() async {
-//     File cropped = await ImageCropper.cropImage(
-//       sourcePath: _imageFile.path,
-//     );
-//     setState(() {
-//       _imageFile = cropped ?? _imageFile;
-//     });
-//   }
-
-//   void _clear() {
-//     setState(() {
-//       _imageFile = null;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-// child: Row(
-//   children: [
-//     IconButton(
-//       icon:Icon(Icons.photo_camera),
-//       onPressed: ()=>_pickImage(ImageSource.camera),
-//     ),
-//     IconButton(
-//       icon:Icon(Icons.photo_library),
-//       onPressed: ()=>_pickImage(ImageSource.gallery),
-//     )
-//   ],
-// ),
-//     );
-//   }
-// }

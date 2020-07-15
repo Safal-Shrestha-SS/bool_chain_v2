@@ -41,6 +41,7 @@ class Navigation extends StatelessWidget {
                 SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => MyBooks()));
                   },
@@ -57,8 +58,13 @@ class Navigation extends StatelessWidget {
                 SizedBox(height: 7),
                 Container(
                   child: GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => UploadBook())),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UploadBook()));
+                    },
                     child: Row(
                       children: [
                         Icon(Icons.cloud_upload),

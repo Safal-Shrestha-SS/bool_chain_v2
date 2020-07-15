@@ -11,20 +11,29 @@ class ImageCapture extends ChangeNotifier {
     imageFile = await ImagePicker.pickImage(source: source);
     inProgress = true;
     notifyListeners();
-    await cropImage();
+    print(imageFile);
+    print('$inProgress');
+    if (imageFile != null) await cropImage();
+
+    inProgress = false;
+    notifyListeners();
   }
 
   Future<void> cropImage() async {
+    print(imageFile.path);
     File cropped = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
+      compressFormat: ImageCompressFormat.jpg,
     );
-
+    print('$inProgress');
     imageFile = cropped ?? imageFile;
-    inProgress = false;
+    print('$inProgress');
+
     notifyListeners();
   }
 
   void clear() {
     imageFile = null;
+    notifyListeners();
   }
 }
