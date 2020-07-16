@@ -8,8 +8,6 @@ import 'package:bool_chain_v2/services/firestore.dart';
 import 'package:bool_chain_v2/data/books.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 
-import 'home_screen.dart';
-
 class UploadBook extends StatefulWidget {
   @override
   _UploadBookState createState() => _UploadBookState();
@@ -77,8 +75,7 @@ class _UploadBookState extends State<UploadBook> {
             FlatButton(
               child: Text('Ok'),
               onPressed: () {
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName(HomeScreen.id));
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -249,33 +246,34 @@ class _UploadBookState extends State<UploadBook> {
                                 }),
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 40.0, top: 20.0),
-                          child: new RaisedButton(
-                              child: const Text('Submit'),
-                              onPressed: () async {
-                                book.genres = _selected;
-                                book.bookOwner =
-                                    await _authService.currentUserID();
-                                // book.image=
-                                if (_formKey.currentState.validate()) {
-                                  if (image.imageFile != null) {
-                                    _formKey.currentState.reset();
-                                    book.image = await _storageService.upload(
-                                        image: image.imageFile,
-                                        name: DateTime.now()
-                                                .millisecondsSinceEpoch
-                                                .toString() +
-                                            book.bookOwner
-                                                .toString()
-                                                .substring(2, 10));
+                        RaisedButton(
+                            child: const Text('Submit'),
+                            onPressed: () async {
+                              book.genres = _selected;
+                              book.bookOwner =
+                                  await _authService.currentUserID();
+                              // book.image=
+                              if (_formKey.currentState.validate()) {
+                                if (image.imageFile != null) {
+                                  book.image = await _storageService.upload(
+                                      image: image.imageFile,
+                                      name: DateTime.now()
+                                              .millisecondsSinceEpoch
+                                              .toString() +
+                                          book.bookOwner
+                                              .toString()
+                                              .substring(2, 10));
 
-                                    fireStoreService.addBook(book);
-                                    _showMyDialog();
-                                  }
+                                  await fireStoreService.addBook(book);
+                                  image.imageFile = null;
+                                  setState(() {
+                                    _selected.clear();
+                                  });
+                                  _formKey.currentState.reset();
+                                  _showMyDialog();
                                 }
-                              }),
-                        ),
+                              }
+                            }),
                       ],
                     ),
                     ((image.inProgress)
