@@ -1,8 +1,14 @@
+import 'package:bool_chain_v2/services/firestorage.dart';
 import 'package:bool_chain_v2/services/image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:bool_chain_v2/services/firestore.dart';
+import 'package:bool_chain_v2/data/books.dart';
+import 'package:bool_chain_v2/services/firebase_auth_service.dart';
+
+import 'home_screen.dart';
 
 class UploadBook extends StatefulWidget {
   @override
@@ -46,6 +52,44 @@ class _UploadBookState extends State<UploadBook> {
     'Poetry'
   ];
   List<String> _selected = [];
+  Book book = Book();
+  void _showMyDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Hello There',
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  'Your book has been uploaded.',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context)
+                    .popUntil(ModalRoute.withName(HomeScreen.id));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  FirebaseAuthService _authService = FirebaseAuthService();
+  FireStorageService _storageService = FireStorageService();
+  FireStoreService fireStoreService = FireStoreService();
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ImageCapture>(
@@ -66,6 +110,9 @@ class _UploadBookState extends State<UploadBook> {
                     ListView(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       children: <Widget>[
+                        if (image.imageFile == null) ...[
+                          Text('Please upload book image'),
+                        ],
                         if (image.imageFile != null) ...[
                           Image.file(image.imageFile),
                           Row(
@@ -103,11 +150,13 @@ class _UploadBookState extends State<UploadBook> {
                           ],
                         ),
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.book),
                             hintText: 'Book Nitle',
                             labelText: 'Book Name',
                           ),
+                          onSaved: (value) => book.bookName = value,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(100)
                           ],
@@ -115,19 +164,23 @@ class _UploadBookState extends State<UploadBook> {
                               val.isEmpty ? 'Name is required' : null,
                         ),
                         new TextFormField(
+                          style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.person),
                             hintText: 'Author name',
                             labelText: 'Author Name',
                           ),
+                          onSaved: (value) => book.bookAuthor = value,
                         ),
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           maxLines: 5,
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.person),
                             hintText: 'Short Description',
                             labelText: 'About Book',
                           ),
+                          onSaved: (value) => book.bookDescription = value,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(500)
                           ],
@@ -200,9 +253,26 @@ class _UploadBookState extends State<UploadBook> {
                           padding: const EdgeInsets.only(left: 40.0, top: 20.0),
                           child: new RaisedButton(
                               child: const Text('Submit'),
-                              onPressed: () {
+                              onPressed: () async {
+                                book.genres = _selected;
+                                book.bookOwner =
+                                    await _authService.currentUserID();
+                                // book.image=
                                 if (_formKey.currentState.validate()) {
-                                  // Process data.
+                                  if (image.imageFile != null) {
+                                    _formKey.currentState.reset();
+                                    book.image = await _storageService.upload(
+                                        image: image.imageFile,
+                                        name: DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString() +
+                                            book.bookOwner
+                                                .toString()
+                                                .substring(2, 10));
+
+                                    fireStoreService.addBook(book);
+                                    _showMyDialog();
+                                  }
                                 }
                               }),
                         ),

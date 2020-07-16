@@ -1,25 +1,29 @@
-// class Book {
-//   final String bookAuthor, bookName, category, image;
-//   final double bookRating, numRating;
-//   Book({
-//     this.image,
-//     this.bookName,
-//     this.bookAuthor,
-//     this.bookRating,
-//     this.category,
-//     this.numRating,
-//   });
-// }
+class Book {
+  String bookAuthor, bookName, image, bookDescription, bookOwner, id;
+  List<String> genres;
+  double bookRating, numofReview;
+  Book({
+    this.id,
+    this.image,
+    this.bookName,
+    this.bookAuthor,
+    this.bookRating,
+    this.genres,
+    this.bookDescription,
+    this.bookOwner,
+    this.numofReview = 0,
+  });
+}
 
 // Future<void> addRestaurant(Book book) {
 //   final restaurants = Firestore.instance.collection('books');
 //   return restaurants.add({
-//     'image': book.bookAuthor,
-//     'bookName': book.bookName,
-//     'bookAuthor': book.bookAuthor,
-//     'bookRating': book.bookRating,
-//     'catergory': book.category,
-//     'numRating': book.numRating,
+// 'image': book.bookAuthor,
+// 'bookName': book.bookName,
+// 'bookAuthor': book.bookAuthor,
+// 'bookRating': book.bookRating,
+// 'catergory': book.genres,
+// 'numRating': book.numRating,
 //   });
 // }
 

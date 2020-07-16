@@ -7,6 +7,7 @@ class FirebaseAuthService extends ChangeNotifier {
   LoggedInUser loggedInUser;
   Future<bool> signIN({var email, var password}) async {
     bool check;
+
     try {
       final user = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -19,6 +20,13 @@ class FirebaseAuthService extends ChangeNotifier {
       check = false;
     }
     return check;
+  }
+
+  Future<String> currentUserID() async {
+    final FirebaseUser user = await _firebaseAuth.currentUser();
+    final uid = user.uid;
+    return uid;
+    // here you write the codes to input the data into firestore
   }
 
   void signOut() {
