@@ -118,7 +118,7 @@ class Navigation extends StatelessWidget {
                 Consumer<FirebaseAuthService>(
                   builder: (context, fire, child) {
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         fire.signOut();
 
                         Navigator.of(context).pushNamedAndRemoveUntil(

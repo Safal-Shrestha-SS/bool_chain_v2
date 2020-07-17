@@ -1,6 +1,8 @@
+import 'package:bool_chain_v2/screens/home_screen.dart';
 import 'package:bool_chain_v2/screens/log_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class InitialLoadingScreen extends StatefulWidget {
   static const String id = 'initial_loading_screen';
@@ -9,6 +11,19 @@ class InitialLoadingScreen extends StatefulWidget {
 }
 
 class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
+  Future<bool> isLoggedIN() async {
+    if (await FirebaseAuth.instance.currentUser() != null)
+      return true;
+    else
+      return false;
+  }
+
+  bool check;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     timeDilation = 4;
@@ -35,18 +50,39 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
                 ),
               );
             },
-            onEnd: () => Navigator.of(context).pushReplacement(PageRouteBuilder(
-              transitionDuration: Duration(milliseconds: 400),
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  LogInPage(),
-              transitionsBuilder: (context, animation, secondaryAnimation, _) {
-                return ScaleTransition(
-                  scale: animation,
-                  alignment: Alignment.center,
-                  child: _,
-                );
-              },
-            )),
+            onEnd: () async {
+              check = await isLoggedIN();
+              if (check) {
+                print('logged in');
+                Navigator.of(context).pushReplacement(PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 400),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      HomeScreen(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, _) {
+                    return ScaleTransition(
+                      scale: animation,
+                      alignment: Alignment.center,
+                      child: _,
+                    );
+                  },
+                ));
+              } else {
+                Navigator.of(context).pushReplacement(PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 400),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      LogInPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, _) {
+                    return ScaleTransition(
+                      scale: animation,
+                      alignment: Alignment.center,
+                      child: _,
+                    );
+                  },
+                ));
+              }
+            },
           ),
         ),
       ),

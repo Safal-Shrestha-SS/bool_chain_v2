@@ -108,7 +108,7 @@ class _UploadBookState extends State<UploadBook> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       children: <Widget>[
                         if (image.imageFile == null) ...[
-                          Text('Please upload book image'),
+                          Center(child: Text('Please upload book image')),
                         ],
                         if (image.imageFile != null) ...[
                           Image.file(image.imageFile),
@@ -170,8 +170,10 @@ class _UploadBookState extends State<UploadBook> {
                           onSaved: (value) => book.bookAuthor = value,
                         ),
                         TextFormField(
+                          textAlign: TextAlign.justify,
+                          maxLines: 2,
+                          textInputAction: TextInputAction.done,
                           style: TextStyle(color: Colors.black),
-                          maxLines: 5,
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.person),
                             hintText: 'Short Description',
