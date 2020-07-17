@@ -263,14 +263,16 @@ class _UploadBookState extends State<UploadBook> {
                                           book.bookOwner
                                               .toString()
                                               .substring(2, 10));
-
+                                  _formKey.currentState.save();
                                   await fireStoreService.addBook(book);
-                                  image.imageFile = null;
+                                  _showMyDialog();
+
                                   setState(() {
                                     _selected.clear();
                                   });
+                                  image.imageFile = null;
+
                                   _formKey.currentState.reset();
-                                  _showMyDialog();
                                 }
                               }
                             }),

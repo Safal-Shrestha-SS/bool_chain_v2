@@ -13,6 +13,7 @@ class FireStoreService {
   Future<void> addBook(Book book) async {
     if (isLoggedIN()) {
       final docRef = Firestore.instance.collection('books');
+      print(book.bookName);
       docRef.add({
         'image': book.image,
         'bookName': book.bookName,
@@ -21,7 +22,7 @@ class FireStoreService {
         'genres': book.genres,
         'time': FieldValue.serverTimestamp(),
         'numofRating': book.numofReview,
-        'rating': book.bookRating,
+        "bookDescription": book.bookDescription,
       });
     }
   }
