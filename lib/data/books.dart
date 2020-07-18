@@ -1,9 +1,10 @@
 class Book {
-  String bookAuthor, bookName, image, bookDescription, bookOwner, id;
+  String bookAuthor, bookName, image, bookDescription, bookOwner, currentHolder;
   List<String> genres;
   double bookRating, numofReview;
+  bool availabe;
   Book({
-    this.id,
+    this.availabe,
     this.image,
     this.bookName,
     this.bookAuthor,
@@ -11,6 +12,7 @@ class Book {
     this.genres,
     this.bookDescription,
     this.bookOwner,
+    this.currentHolder,
     this.numofReview = 0,
   });
 }

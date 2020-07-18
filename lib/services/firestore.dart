@@ -15,6 +15,8 @@ class FireStoreService {
       final docRef = Firestore.instance.collection('books');
       print(book.bookName);
       docRef.add({
+        'available': book.availabe,
+        'bookOwner': book.bookOwner,
         'image': book.image,
         'bookName': book.bookName,
         'bookAuthor': book.bookAuthor,
