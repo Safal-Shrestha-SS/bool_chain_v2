@@ -49,6 +49,7 @@ class _UploadBookState extends State<UploadBook> {
     'Textbook',
     'Poetry'
   ];
+
   List<String> _selected = [];
   Book book = Book();
   void _showMyDialog() {
@@ -171,11 +172,11 @@ class _UploadBookState extends State<UploadBook> {
                         ),
                         TextFormField(
                           textAlign: TextAlign.justify,
-                          maxLines: 2,
+                          maxLines: null,
                           textInputAction: TextInputAction.done,
                           style: TextStyle(color: Colors.black),
-                          decoration: const InputDecoration(
-                            icon: const Icon(Icons.person),
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.person),
                             hintText: 'Short Description',
                             labelText: 'About Book',
                           ),

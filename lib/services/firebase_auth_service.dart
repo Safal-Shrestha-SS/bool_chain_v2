@@ -6,7 +6,7 @@ class FirebaseAuthService extends ChangeNotifier {
   final _firebaseAuth = FirebaseAuth.instance;
   LoggedInUser loggedInUser;
   Future<bool> signIN({var email, var password}) async {
-    bool check;
+    bool check = false;
 
     try {
       final user = await _firebaseAuth.signInWithEmailAndPassword(
