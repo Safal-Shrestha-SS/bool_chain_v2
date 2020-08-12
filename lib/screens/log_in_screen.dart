@@ -58,7 +58,7 @@ class _LogInPageState extends State<LogInPage> {
                           errorMaxLines: 1,
                           hintText: "Enter your email",
                         ),
-                        onSubmitted: (value) {
+                        onChanged: (value) {
                           email = value;
                         },
                       ),
@@ -71,7 +71,7 @@ class _LogInPageState extends State<LogInPage> {
                       width: 250,
                       decoration: kcontainerDecoration,
                       child: TextField(
-                        onSubmitted: (value) {
+                        onChanged: (value) {
                           password = value;
                         },
                         obscureText: true,
