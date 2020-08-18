@@ -12,4 +12,11 @@ class FireStorageService {
     var downloadURL = await (await _uploadTask.onComplete).ref.getDownloadURL();
     return downloadURL.toString();
   }
+
+  Future<String> uploadUser({File image, String name}) async {
+    String filePath = 'users/$name.jpg';
+    _uploadTask = _storage.ref().child(filePath).putFile(image);
+    var downloadURL = await (await _uploadTask.onComplete).ref.getDownloadURL();
+    return downloadURL.toString();
+  }
 }

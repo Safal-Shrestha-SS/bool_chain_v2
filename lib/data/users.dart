@@ -4,7 +4,7 @@ class Users {
   Position position;
   String userId, userName, userProfilePicture, userBio, userAddress, userEmail;
   List<String> userHonor;
-  double userNumber, userRating;
+  double userRating;
   List<String> userBooks;
   Users(
       {this.userAddress,
@@ -14,8 +14,7 @@ class Users {
       this.userId,
       this.position,
       this.userName,
-      this.userNumber,
       this.userHonor,
       this.userProfilePicture,
-      this.userRating});
+      this.userRating = 50});
 }

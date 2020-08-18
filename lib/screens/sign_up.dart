@@ -311,10 +311,30 @@ class _SignUpPageState extends State<SignUpPage> {
                                   users.userId = await _authService.signUp(
                                       users.userEmail, _password);
                                   await _authService.sendEmailVerification();
+                                  if (image.imageFile != null) {
+                                    users.userProfilePicture =
+                                        await _storageService.uploadUser(
+                                            image: image.imageFile,
+                                            name: DateTime.now()
+                                                    .millisecondsSinceEpoch
+                                                    .toString() +
+                                                users.userName.substring(1, 5));
+                                  }
+                                  await _fireStoreService.addUser(users);
+                                  _pageController.animateToPage(2,
+                                      duration: Duration(milliseconds: 100),
+                                      curve: Curves.bounceIn);
+                                  _formKey.currentState.reset();
+                                  Future.delayed(Duration(seconds: 5));
+                                  Navigator.pop(context);
                                 }
                               }),
                         )
                       ],
+                    ),
+                    Center(
+                      child: Text(
+                          'Thank you for creating your account. Please verify your email to continye furthur'),
                     ),
                   ],
                 ),
