@@ -4,9 +4,10 @@ import 'screens/home_screen.dart';
 import 'screens/log_in_screen.dart';
 import 'screens/initial_loading_screen.dart';
 import 'services/firebase_auth_service.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main() {
-  // timeDilation = 0.5;
+  timeDilation = 0.00050;
   runApp(MyApp());
 }
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light().copyWith(
-          primaryColor: Color(0xffcf7500),
+          primaryColor: Color(0xffc7a4e5),
           textTheme: TextTheme(
             // bodyText1: TextStyle(color: Colors.black),
             bodyText2: TextStyle(color: Colors.black54),

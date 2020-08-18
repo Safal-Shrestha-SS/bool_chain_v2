@@ -1,3 +1,4 @@
+import 'package:bool_chain_v2/screens/sign_up.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,19 +99,15 @@ class _LogInPageState extends State<LogInPage> {
                           setState(() {
                             spinner = true;
                           });
-                          bool fa = await fire.signIN(
-                              email: email, password: password);
-                          if (fa == true) {
-                            setState(() {
-                              spinner = false;
-                            });
+                          try {
+                            await fire.signIn(email, password);
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => HomeScreen(),
                               ),
                             );
-                          } else {
+                          } catch (e) {
                             setState(() {
                               spinner = false;
                             });
@@ -127,6 +124,26 @@ class _LogInPageState extends State<LogInPage> {
                       );
                     }),
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(child: Text("Forgot password?")),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    GestureDetector(
+                      child: Text("Sign Up"),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUpPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 )
               ],
             ),

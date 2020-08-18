@@ -3,8 +3,14 @@ import 'package:bool_chain_v2/screen_body/top_app_bar.dart';
 import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
 import 'package:bool_chain_v2/screen_body/home.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,

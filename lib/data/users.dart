@@ -1,14 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Users {
-  GeoPoint position;
-  String userId,
-      userName,
-      userProfilePicture,
-      userBio,
-      userGender,
-      userAddress,
-      userEmail;
+  Position position;
+  String userId, userName, userProfilePicture, userBio, userAddress, userEmail;
   List<String> userHonor;
   double userNumber, userRating;
   List<String> userBooks;
@@ -17,7 +11,6 @@ class Users {
       this.userBio,
       this.userBooks,
       this.userEmail,
-      this.userGender,
       this.userId,
       this.position,
       this.userName,

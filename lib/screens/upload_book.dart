@@ -97,9 +97,10 @@ class _UploadBookState extends State<UploadBook> {
           title: new Text('Upload Book'),
         ),
         body: SafeArea(
-            top: false,
-            bottom: false,
-            child: Consumer<ImageCapture>(builder: (context, image, child) {
+          top: false,
+          bottom: false,
+          child: Consumer<ImageCapture>(
+            builder: (context, image, child) {
               return Form(
                 key: _formKey,
                 autovalidate: true,
@@ -151,7 +152,7 @@ class _UploadBookState extends State<UploadBook> {
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.book),
-                            hintText: 'Book Nitle',
+                            hintText: 'Book Title',
                             labelText: 'Book Name',
                           ),
                           onSaved: (value) => book.bookName = value,
@@ -254,7 +255,8 @@ class _UploadBookState extends State<UploadBook> {
                             onPressed: () async {
                               book.genres = _selected;
                               book.bookOwner =
-                                  await _authService.currentUserID();
+                                  (await _authService.getCurrentUser())
+                                      .toString();
                               // book.image=
                               if (_formKey.currentState.validate()) {
                                 if (image.imageFile != null) {
@@ -292,7 +294,9 @@ class _UploadBookState extends State<UploadBook> {
                   ],
                 ),
               );
-            })),
+            },
+          ),
+        ),
       ),
     );
   }

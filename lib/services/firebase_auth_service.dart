@@ -4,38 +4,36 @@ import 'package:flutter/foundation.dart';
 
 class FirebaseAuthService extends ChangeNotifier {
   final _firebaseAuth = FirebaseAuth.instance;
-  LoggedInUser loggedInUser;
-  Future<bool> signIN({var email, var password}) async {
-    bool check = false;
-
-    try {
-      final user = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      if (user != null) {
-        loggedInUser = LoggedInUser(loggedInUser: user);
-        check = true;
-      }
-    } catch (e) {
-      print(e);
-      check = false;
-    }
-    return check;
+  Future<String> signIn(String email, String password) async {
+    AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+    FirebaseUser user = result.user;
+    return user.uid;
   }
 
-  Future<String> currentUserID() async {
-    final FirebaseUser user = await _firebaseAuth.currentUser();
-    final uid = user.uid;
-    return uid;
-    // here you write the codes to input the data into firestore
+  Future<String> signUp(String email, String password) async {
+    AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    FirebaseUser user = result.user;
+    return user.uid;
   }
 
-  void signOut() {
-    _firebaseAuth.signOut();
-    loggedInUser = null;
+  Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user;
   }
-}
 
-class LoggedInUser {
-  final loggedInUser;
-  LoggedInUser({this.loggedInUser});
+  Future<void> signOut() async {
+    return _firebaseAuth.signOut();
+  }
+
+  Future<void> sendEmailVerification() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    user.sendEmailVerification();
+  }
+
+  Future<bool> isEmailVerified() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user.isEmailVerified;
+  }
 }
