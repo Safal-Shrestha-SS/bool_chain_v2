@@ -12,10 +12,14 @@ class FirebaseAuthService extends ChangeNotifier {
   }
 
   Future<String> signUp(String email, String password) async {
+    // try {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
     return user.uid;
+    // } catch (e) {
+    //   return e.message;
+    // }
   }
 
   Future<FirebaseUser> getCurrentUser() async {
@@ -30,6 +34,11 @@ class FirebaseAuthService extends ChangeNotifier {
   Future<void> sendEmailVerification() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     user.sendEmailVerification();
+  }
+
+  Future<void> sendPasswordResetVerification(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+    return "Password Reset Link sent ";
   }
 
   Future<bool> isEmailVerified() async {

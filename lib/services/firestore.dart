@@ -32,15 +32,18 @@ class FireStoreService {
 
   Future<void> addUser(Users user) async {
     if (isLoggedIN()) {
-      final docRef = Firestore.instance.collection('users');
-      // print(book.bookName);
-      docRef.add({
+      final docRef =
+          Firestore.instance.collection('users').document("${user.userId}");
+      print(user.userId);
+
+      docRef.setData({
         'image': user.userProfilePicture,
         'userName': user.userName,
-        'userGeoCode': user.position,
+        'userGeoCode':
+            GeoPoint(user.position.latitude, user.position.longitude),
         'userRating': user.userRating,
         'time': FieldValue.serverTimestamp(),
-        'suserBio': user.userBio,
+        'userBio': user.userBio,
         'userAddress': user.userAddress,
         'userId': user.userId,
       });

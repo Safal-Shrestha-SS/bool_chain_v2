@@ -1,8 +1,14 @@
 import 'package:geolocator/geolocator.dart';
 
 class GeoLocationService {
+  Future<bool> checkLocationService() async {
+    bool status = await Geolocator().isLocationServiceEnabled();
+    return status;
+  }
+
   Future<Position> getLocation() async {
-    Geolocator()..forceAndroidLocationManager = true;
+    Geolocator().forceAndroidLocationManager = true;
+
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
@@ -10,9 +16,8 @@ class GeoLocationService {
   }
 
   Future<String> getAddress(Position position) async {
-     List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(
-        position.latitude, position.longitude
-        );
+    List<Placemark> placemarks = await Geolocator()
+        .placemarkFromCoordinates(position.latitude, position.longitude);
     print(position);
 
     Placemark placeMark = placemarks[0];

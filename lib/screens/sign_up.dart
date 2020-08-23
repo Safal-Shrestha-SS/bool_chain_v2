@@ -36,6 +36,15 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  int _counter = 5;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
+
+  bool _error = false;
   bool _toggle = false;
   FireStorageService _storageService = FireStorageService();
   FirebaseAuthService _authService = FirebaseAuthService();
@@ -44,74 +53,66 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ImageCapture>(
       create: (context) => ImageCapture(),
-      child: SafeArea(
-        child: Material(
-            color: Theme.of(context).primaryColor,
-            child: Consumer<ImageCapture>(builder: (context, image, child) {
-              return Form(
-                key: _formKey,
-                child: PageView(
-                  controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    ListView(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Book_Chain',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              inherit: false,
-                              fontSize: 40,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        TextFormField(
-                          style: TextStyle(color: Colors.black),
-                          decoration: const InputDecoration(
-                            enabledBorder: InputBorder.none,
-                            icon: const Icon(Icons.title),
-                            hintText: 'Name',
-                            labelText: ' Name',
+      child: Scaffold(
+        body: SafeArea(
+          child: Material(
+              child: Consumer<ImageCapture>(builder: (context, image, child) {
+            return Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Theme.of(context).primaryColor,
+                Colors.transparent
+              ])),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Form(
+                  key: _formKey,
+                  child: PageView(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      ListView(
+                        children: [
+                          SizedBox(
+                            height: 20,
                           ),
-                          onSaved: (value) => users.userName = value,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(100)
-                          ],
-                          validator: (val) =>
-                              val.isEmpty ? 'Name is required' : null,
-                        ),
-                        new TextFormField(
-                          style: TextStyle(color: Colors.black),
-                          decoration: const InputDecoration(
-                            icon: const Icon(Icons.email),
-                            hintText: 'Email',
-                            labelText: 'Email',
+                          Text(
+                            'Book_Chain',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                inherit: false,
+                                fontSize: 40,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
-                          controller: emailInputController,
-                          keyboardType: TextInputType.emailAddress,
-                          onSaved: (value) => users.userEmail = value,
-                          validator: emailValidator,
-                        ),
-                        TextFormField(
-                          textAlign: TextAlign.justify,
-                          maxLines: 1,
-                          obscureText: true,
-                          textInputAction: TextInputAction.done,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.visibility_off),
-                            hintText: 'Password',
-                            labelText: 'Password',
+                          TextFormField(
+                            autofocus: true,
+                            style: TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
+                              icon: const Icon(Icons.title),
+                              hintText: 'Name',
+                              labelText: ' Name',
+                            ),
+                            onSaved: (value) => users.userName = value,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(100)
+                            ],
+                            validator: (val) =>
+                                val.isEmpty ? 'Name is required' : null,
                           ),
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(30)
-                          ],
-                          onSaved: (value) => _password = value,
-                        ),
-                        TextFormField(
+                          new TextFormField(
+                            style: TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
+                              icon: const Icon(Icons.email),
+                              hintText: 'Email',
+                              labelText: 'Email',
+                            ),
+                            controller: emailInputController,
+                            keyboardType: TextInputType.emailAddress,
+                            onSaved: (value) => users.userEmail = value,
+                            validator: emailValidator,
+                          ),
+                          TextFormField(
                             textAlign: TextAlign.justify,
                             maxLines: 1,
                             obscureText: true,
@@ -119,227 +120,348 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               icon: Icon(Icons.visibility_off),
-                              hintText: 'Confirm Password',
-                              labelText: 'Confirm Password',
+                              hintText: 'Password',
+                              labelText: 'Password',
                             ),
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(30)
                             ],
-                            onSaved: (value) {
-                              print(value);
-                            },
-                            validator: (val) {
-                              String msg;
-                              if (val != _password) {
-                                msg = 'Password do not match';
-                              } else if (val.length <= 7)
-                                msg =
-                                    "Password must be longer than 7 character";
-                              else
-                                msg = null;
-                              return msg;
-                            }),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          child: MaterialButton(
-                              child: Icon(Icons.arrow_forward),
-                              onPressed: () {
-                                _formKey.currentState.save();
-                                if (_formKey.currentState.validate()) {
-                                  _pageController.animateToPage(1,
-                                      duration: Duration(milliseconds: 100),
-                                      curve: Curves.bounceIn);
-                                  print('nani');
-                                }
+                            onSaved: (value) => _password = value,
+                          ),
+                          TextFormField(
+                              textAlign: TextAlign.justify,
+                              maxLines: 1,
+                              obscureText: true,
+                              textInputAction: TextInputAction.done,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.visibility_off),
+                                hintText: 'Confirm Password',
+                                labelText: 'Confirm Password',
+                              ),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(30)
+                              ],
+                              onSaved: (value) {
+                                print(value);
+                              },
+                              validator: (val) {
+                                String msg;
+                                if (val != _password) {
+                                  msg = 'Password do not match';
+                                } else if (val.length <= 7)
+                                  msg =
+                                      "Password must be longer than 7 character";
+                                else
+                                  msg = null;
+                                return msg;
                               }),
-                        ),
-                      ],
-                    ),
-                    ListView(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 20,
-                        ),
-                        if (image.imageFile == null) ...[
-                          Center(
-                            child: Stack(
-                              children: [
-                                CircleAvatar(
-                                  radius: 70,
-                                  child: Icon(
-                                    Icons.account_circle,
-                                    size: 140,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 2,
-                                  right: 0,
-                                  child: IconButton(
-                                    icon: Icon(Icons.add_a_photo),
-                                    onPressed: () async {
-                                      await image
-                                          .pickImage(ImageSource.gallery);
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                        if (image.imageFile != null) ...[
-                          Center(
-                            child: Stack(
-                              children: [
-                                CircleAvatar(
-                                  radius: 70,
-                                  child: CircleAvatar(
-                                    radius: 65,
-                                    backgroundImage: FileImage(image.imageFile),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 2,
-                                  right: 0,
-                                  child: IconButton(
-                                    icon: Icon(Icons.add_a_photo),
-                                    onPressed: () async {
-                                      await image
-                                          .pickImage(ImageSource.gallery);
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          textAlign: TextAlign.justify,
-                          maxLines: null,
-                          textInputAction: TextInputAction.done,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.person),
-                            hintText: 'Short Description',
-                            labelText: 'About User',
-                          ),
-                          onSaved: (value) => users.userBio = value,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(500)
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                            child: Text(
-                          'Address: $_address',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                            child: Center(
-                                child: Container(
-                                    width: 200,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
-                                        )),
-                                    child: Center(
-                                        child: Text(
-                                      'Get Location',
-                                      textAlign: TextAlign.center,
-                                    )))),
-                            onTap: () async {
-                              Position position =
-                                  await geoLocationService.getLocation();
-                              users.position = position;
-                              users.userAddress =
-                                  await geoLocationService.getAddress(position);
-                              setState(() {
-                                _address = users.userAddress;
-                              });
-                            }),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: _toggle,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _toggle = !_toggle;
-                                  });
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: MaterialButton(
+                                child: Icon(Icons.arrow_forward),
+                                onPressed: () {
+                                  _formKey.currentState.save();
+                                  if (_formKey.currentState.validate()) {
+                                    _pageController.animateToPage(1,
+                                        duration: Duration(milliseconds: 100),
+                                        curve: Curves.linear);
+                                    print('nani');
+                                  }
                                 }),
-                            Expanded(
-                              child: Text(
-                                'I acccept the terms and conditions of BookChain',
-                                strutStyle: StrutStyle(fontSize: 10),
+                          ),
+                        ],
+                      ),
+                      ListView(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 20,
+                          ),
+                          if (image.imageFile == null) ...[
+                            Center(
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 70,
+                                    child: Icon(
+                                      Icons.account_circle,
+                                      size: 140,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 2,
+                                    right: 0,
+                                    child: IconButton(
+                                      icon: Icon(Icons.add_a_photo),
+                                      onPressed: () async {
+                                        await image
+                                            .pickImage(ImageSource.gallery);
+                                      },
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              )),
-                              child: Text('Register'),
-                              onPressed: () async {
-                                _formKey.currentState.save();
-                                if (users.userAddress == null) {
-                                  setState(() {
-                                    _address = "We need your address";
-                                  });
-                                } else if (_toggle == false) {
-                                  // print("dame");
-                                } else {
-                                  users.userId = await _authService.signUp(
-                                      users.userEmail, _password);
-                                  await _authService.sendEmailVerification();
-                                  if (image.imageFile != null) {
-                                    users.userProfilePicture =
-                                        await _storageService.uploadUser(
-                                            image: image.imageFile,
-                                            name: DateTime.now()
-                                                    .millisecondsSinceEpoch
-                                                    .toString() +
-                                                users.userName.substring(1, 5));
+                          if (image.imageFile != null) ...[
+                            Center(
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 70,
+                                    child: CircleAvatar(
+                                      radius: 65,
+                                      backgroundImage:
+                                          FileImage(image.imageFile),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 2,
+                                    right: 0,
+                                    child: IconButton(
+                                      icon: Icon(Icons.add_a_photo),
+                                      onPressed: () async {
+                                        await image
+                                            .pickImage(ImageSource.gallery);
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            textAlign: TextAlign.justify,
+                            maxLines: null,
+                            textInputAction: TextInputAction.done,
+                            style: TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                              icon: Icon(Icons.person),
+                              hintText: 'Short Description',
+                              labelText: 'About User',
+                            ),
+                            onSaved: (value) => users.userBio = value,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(500)
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Center(
+                              child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Address: ',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              // _error?Text('hello'):,
+                              if (_error == false) ...[
+                                Expanded(
+                                  child: Text(
+                                    '$_address',
+                                  ),
+                                )
+                              ] else ...[
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 7,
+                                      ),
+                                      LinearProgressIndicator(),
+                                    ],
+                                  ),
+                                )
+                              ]
+                            ],
+                          )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 7),
+                            child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                )),
+                                child: Center(
+                                    child: Text(
+                                  'Get Location',
+                                  textAlign: TextAlign.center,
+                                )),
+                                onPressed: () async {
+                                  if (await geoLocationService
+                                      .checkLocationService()) {
+                                    setState(() {
+                                      _error = true;
+                                    });
+                                    await Future.delayed(Duration(seconds: 1));
+                                    await geoLocationService
+                                        .getLocation()
+                                        .then((value) async {
+                                          Position position = value;
+                                          print('k bhayo hamro samaye');
+                                          print(value);
+
+                                          users.position = position;
+                                          users.userAddress =
+                                              await geoLocationService
+                                                  .getAddress(position);
+                                          setState(() {
+                                            _address = users.userAddress;
+                                          });
+                                        })
+                                        .timeout(Duration(seconds: 5))
+                                        .catchError((e) {
+                                          setState(() {
+                                            print("dame $e");
+                                            _address =
+                                                "Something went wrong.Try again later";
+                                          });
+                                        })
+                                        .whenComplete(() {
+                                          setState(() {
+                                            _error = false;
+                                          });
+                                        });
+                                  } else {
+                                    setState(() {
+                                      _address = 'Location service not enabled';
+                                    });
                                   }
-                                  await _fireStoreService.addUser(users);
-                                  _pageController.animateToPage(2,
-                                      duration: Duration(milliseconds: 100),
-                                      curve: Curves.bounceIn);
-                                  _formKey.currentState.reset();
-                                  Future.delayed(Duration(seconds: 5));
-                                  Navigator.pop(context);
-                                }
-                              }),
-                        )
-                      ],
-                    ),
-                    Center(
-                      child: Text(
-                          'Thank you for creating your account. Please verify your email to continye furthur'),
-                    ),
-                  ],
+                                }),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                  value: _toggle,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _toggle = !_toggle;
+                                    });
+                                  }),
+                              Expanded(
+                                child: Text(
+                                  'I acccept the terms and conditions of BookChain',
+                                  strutStyle: StrutStyle(fontSize: 10),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                )),
+                                child: Text('Register'),
+                                onPressed: () async {
+                                  if (users.userAddress == null) {
+                                    setState(() {
+                                      _address = "We need your address";
+                                    });
+                                  } else if (_toggle == false) {
+                                    // print("dame");
+                                  } else {
+                                    await _authService
+                                        .signUp(users.userEmail, _password)
+                                        .then((value) async {
+                                      users.userId = value;
+                                      print(value);
+                                      await _authService
+                                          .sendEmailVerification();
+                                      if (image.imageFile != null) {
+                                        users.userProfilePicture =
+                                            await _storageService.uploadUser(
+                                                image: image.imageFile,
+                                                name: DateTime.now()
+                                                        .millisecondsSinceEpoch
+                                                        .toString() +
+                                                    users.userName
+                                                        .substring(1));
+                                      }
+                                      _formKey.currentState.save();
+                                      await _fireStoreService.addUser(users);
+                                      _pageController.animateToPage(2,
+                                          duration: Duration(milliseconds: 100),
+                                          curve: Curves.bounceIn);
+                                      _formKey.currentState.reset();
+                                      await Future.delayed(
+                                          Duration(seconds: 1));
+                                      while (_counter > 0) {
+                                        await Future.delayed(
+                                            Duration(seconds: 1));
+                                        _incrementCounter();
+                                      }
+                                      _authService.signOut();
+                                      Navigator.pop(context);
+                                    }).catchError((e) {
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text("Error: ${e.message}"),
+                                        action: SnackBarAction(
+                                          label: 'OK',
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ));
+                                      print("hello ");
+                                    });
+                                  }
+                                }),
+                          )
+                        ],
+                      ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Thank you for creating your account',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 15),
+                            ),
+                            Text(
+                              'Please verify your email to login',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 15),
+                            ),
+                            Text(
+                              'You will be redirected to login page in',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 15),
+                            ),
+                            Text(
+                              '$_counter',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              );
-            })),
+              ),
+            );
+          })),
+        ),
       ),
     );
   }

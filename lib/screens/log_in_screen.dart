@@ -1,3 +1,4 @@
+import 'package:bool_chain_v2/screens/forgot_password.dart';
 import 'package:bool_chain_v2/screens/sign_up.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +17,22 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends State<LogInPage> {
   String email, password;
   bool spinner = false;
+  String _error;
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       dismissible: true,
       inAsyncCall: spinner,
-      child: SafeArea(
-        child: Container(
-          width: double.infinity,
-          child: Material(
-            color: Theme.of(context).primaryColor,
+      child: Scaffold(
+        body: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              Theme.of(context).primaryColor,
+              Colors.transparent
+            ])),
+            width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -49,26 +56,28 @@ class _LogInPageState extends State<LogInPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height: 30,
+                      height: 35,
                       width: 250,
                       decoration: kcontainerDecoration,
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black),
-                        decoration: kformDecoration.copyWith(
-                          errorMaxLines: 1,
-                          hintText: "Enter your email",
+                      child: Center(
+                        child: TextField(
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black),
+                          decoration: kformDecoration.copyWith(
+                            hintText: "Enter your email",
+                          ),
+                          onChanged: (value) {
+                            email = value;
+                          },
                         ),
-                        onChanged: (value) {
-                          email = value;
-                        },
                       ),
                     ),
                     SizedBox(
                       height: 24.0,
                     ),
                     Container(
-                      height: 30,
+                      height: 35,
                       width: 250,
                       decoration: kcontainerDecoration,
                       child: TextField(
@@ -83,7 +92,7 @@ class _LogInPageState extends State<LogInPage> {
                           hintText: "Enter your password",
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Padding(
@@ -109,7 +118,18 @@ class _LogInPageState extends State<LogInPage> {
                             );
                           } catch (e) {
                             setState(() {
+                              _error = e.message;
+                              print('hello error');
                               spinner = false;
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text("Error: $_error"),
+                                action: SnackBarAction(
+                                  label: 'OK',
+                                  onPressed: () {
+                                    // Some code to undo the change.
+                                  },
+                                ),
+                              ));
                             });
                           }
                         },
@@ -128,13 +148,23 @@ class _LogInPageState extends State<LogInPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(child: Text("Forgot password?")),
+                    GestureDetector(
+                        child: Text("Forgot password?"),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPassword(),
+                            ),
+                          );
+                        }),
                     SizedBox(
                       width: 30,
                     ),
                     GestureDetector(
                       child: Text("Sign Up"),
                       onTap: () {
+                        print('nsasdfghjk');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
