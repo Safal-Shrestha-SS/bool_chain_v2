@@ -58,7 +58,10 @@ class _UserAccountPageState extends State<UserAccountPage> {
               child: ListView.builder(
                   itemCount: 20,
                   itemBuilder: (BuildContext ctxt, int index) {
-                    return Text('Fxirst Book');
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Fxirst Book'),
+                    );
                   }),
             ),
             ListTile(

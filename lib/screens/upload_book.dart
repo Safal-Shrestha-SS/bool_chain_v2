@@ -136,26 +136,39 @@ class _UploadBookState extends State<UploadBook> {
                           children: [
                             IconButton(
                               icon: Icon(Icons.photo_camera),
-                              onPressed: () {
-                                image.pickImage(ImageSource.camera);
+                              onPressed: () async {
+                                _formKey.currentState.save();
+
+                                print(
+                                    '${book.bookName} ${book.bookAuthor} ${book.bookDescription}');
+                                await image.pickImage(ImageSource.camera);
                               }, // image.pickImage(ImageSource.camera),
                             ),
                             IconButton(
                               icon: Icon(Icons.photo_library),
                               onPressed: () async {
+                                print("fool");
+                                print(
+                                    '${book.bookName} ${book.bookAuthor} ${book.bookDescription}');
+                                // _formKey.currentState.save();
+
                                 await image.pickImage(ImageSource.gallery);
+                                print(
+                                    '${book.bookName} ${book.bookAuthor} ${book.bookDescription}');
                               },
                             )
                           ],
                         ),
                         TextFormField(
+                          controller: TextEditingController()
+                            ..text = book.bookName,
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.book),
                             hintText: 'Book Title',
                             labelText: 'Book Name',
                           ),
-                          onSaved: (value) => book.bookName = value,
+                          onChanged: (value) => book.bookName = value,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(100)
                           ],
@@ -163,15 +176,19 @@ class _UploadBookState extends State<UploadBook> {
                               val.isEmpty ? 'Name is required' : null,
                         ),
                         new TextFormField(
+                          controller: TextEditingController()
+                            ..text = book.bookAuthor,
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.person),
                             hintText: 'Author name',
                             labelText: 'Author Name',
                           ),
-                          onSaved: (value) => book.bookAuthor = value,
+                          onChanged: (value) => book.bookAuthor = value,
                         ),
                         TextFormField(
+                          controller: TextEditingController()
+                            ..text = book.bookDescription,
                           textAlign: TextAlign.justify,
                           maxLines: null,
                           textInputAction: TextInputAction.done,
@@ -181,7 +198,7 @@ class _UploadBookState extends State<UploadBook> {
                             hintText: 'Short Description',
                             labelText: 'About Book',
                           ),
-                          onSaved: (value) => book.bookDescription = value,
+                          onChanged: (value) => book.bookDescription = value,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(500)
                           ],

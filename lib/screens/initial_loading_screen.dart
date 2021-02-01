@@ -22,17 +22,17 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
   @override
   void initState() {
     super.initState();
+    timeDilation = 0.5;
   }
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 4;
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
         child: Center(
           child: TweenAnimationBuilder(
-            duration: Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 2000),
             tween: Tween<double>(begin: 0, end: 1),
             curve: Curves.bounceOut,
             builder: (context, value, child) {
@@ -55,7 +55,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
               if (check) {
                 print('logged in');
                 Navigator.of(context).pushReplacement(PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 400),
+                  transitionDuration: Duration(milliseconds: 800),
                   pageBuilder: (context, animation, secondaryAnimation) =>
                       HomeScreen(),
                   transitionsBuilder:
@@ -69,7 +69,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
                 ));
               } else {
                 Navigator.of(context).pushReplacement(PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 400),
+                  transitionDuration: Duration(milliseconds: 800),
                   pageBuilder: (context, animation, secondaryAnimation) =>
                       LogInPage(),
                   transitionsBuilder:

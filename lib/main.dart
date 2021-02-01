@@ -4,18 +4,14 @@ import 'screens/home_screen.dart';
 import 'screens/log_in_screen.dart';
 import 'screens/initial_loading_screen.dart';
 import 'services/firebase_auth_service.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main() {
-  timeDilation = 0.00050;
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //timeDilation = 6;
-
     return ChangeNotifierProvider<FirebaseAuthService>(
       create: (context) => FirebaseAuthService(),
       child: MaterialApp(

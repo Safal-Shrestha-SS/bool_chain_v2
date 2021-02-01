@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bool_chain_v2/screen_body/top_app_bar.dart';
 import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
 import 'package:bool_chain_v2/screen_body/home.dart';
+// import 'package:flutter/schedulr.dart' show timeDilation;
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -10,8 +11,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // timeDilation=3.0;
   @override
   Widget build(BuildContext context) {
+    // timeDilation = 1;
     return DefaultTabController(
       length: 2,
       child: Scaffold(

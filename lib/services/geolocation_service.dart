@@ -7,7 +7,7 @@ class GeoLocationService {
   }
 
   Future<Position> getLocation() async {
-    Geolocator().forceAndroidLocationManager = true;
+    // Geolocator().forceAndroidLocationManager = true;
 
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
