@@ -2,6 +2,7 @@ import 'package:bool_chain_v2/screens/log_in_screen.dart';
 import 'package:bool_chain_v2/screens/my_books.dart';
 import 'package:bool_chain_v2/screens/upload_book.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
+import 'package:bool_chain_v2/screens/user_account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -106,12 +107,21 @@ class Navigation extends StatelessWidget {
                 ),
                 SizedBox(height: 7),
                 Container(
-                  child: Row(
-                    children: [
-                      Icon(Icons.account_circle),
-                      SizedBox(width: 7),
-                      Text('Account', style: ktextStyle),
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserAccountPage()));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.account_circle),
+                        SizedBox(width: 7),
+                        Text('Account', style: ktextStyle),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 7),
