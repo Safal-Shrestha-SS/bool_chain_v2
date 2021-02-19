@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:bool_chain_v2/services/firestore.dart';
 import 'package:bool_chain_v2/data/books.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class UploadBook extends StatefulWidget {
   @override
@@ -14,7 +15,11 @@ class UploadBook extends StatefulWidget {
 }
 
 class _UploadBookState extends State<UploadBook> {
+  double rating = 2.5;
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  final TextEditingController _author = new TextEditingController();
+  final TextEditingController _bookDescription = new TextEditingController();
+  final TextEditingController _bookName = new TextEditingController();
   List<String> _colors = <String>[
     'Action and Adventure',
     'Anthology',
@@ -35,7 +40,7 @@ class _UploadBookState extends State<UploadBook> {
     'Memoir',
     'Mystery',
     'Mythology',
-    'Narrative Nonfictio',
+    'Narrative Nonfiction',
     'Periodicals',
     'Realistic Fiction',
     'Reference Books',
@@ -150,7 +155,6 @@ class _UploadBookState extends State<UploadBook> {
                                 print("fool");
                                 print(
                                     '${book.bookName} ${book.bookAuthor} ${book.bookDescription}');
-                                // _formKey.currentState.save();
 
                                 await image.pickImage(ImageSource.gallery);
                                 print(
@@ -160,8 +164,7 @@ class _UploadBookState extends State<UploadBook> {
                           ],
                         ),
                         TextFormField(
-                          controller: TextEditingController()
-                            ..text = book.bookName,
+                          controller: _bookName,
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.book),
@@ -176,8 +179,7 @@ class _UploadBookState extends State<UploadBook> {
                               val.isEmpty ? 'Name is required' : null,
                         ),
                         new TextFormField(
-                          controller: TextEditingController()
-                            ..text = book.bookAuthor,
+                          controller: _author,
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             icon: const Icon(Icons.person),
@@ -187,8 +189,7 @@ class _UploadBookState extends State<UploadBook> {
                           onChanged: (value) => book.bookAuthor = value,
                         ),
                         TextFormField(
-                          controller: TextEditingController()
-                            ..text = book.bookDescription,
+                          controller: _bookDescription,
                           textAlign: TextAlign.justify,
                           maxLines: null,
                           textInputAction: TextInputAction.done,
@@ -205,6 +206,7 @@ class _UploadBookState extends State<UploadBook> {
                         ),
                         SizedBox(height: 10),
                         Container(child: Text('Genres')),
+                        SizedBox(height: 10),
                         Wrap(
                           spacing: 8.0, // gap between adjacent chips
                           runSpacing: 4.0, // gap between lines
@@ -267,13 +269,37 @@ class _UploadBookState extends State<UploadBook> {
                                 }),
                           ],
                         ),
+                        Center(
+                          child: RatingBar.builder(
+                            initialRating: 3,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (value) {
+                              book.bookRating = value;
+                              setState(() {
+                                rating = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Text(
+                          rating.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         RaisedButton(
                             child: const Text('Submit'),
                             onPressed: () async {
                               book.genres = _selected;
                               book.bookOwner =
-                                  (await _authService.getCurrentUser())
-                                      .toString();
+                                  (await _authService.getCurrentUser()).uid;
                               // book.image=
                               if (_formKey.currentState.validate()) {
                                 if (image.imageFile != null) {
@@ -287,14 +313,16 @@ class _UploadBookState extends State<UploadBook> {
                                               .substring(2, 10));
                                   _formKey.currentState.save();
                                   await fireStoreService.addBook(book);
+
                                   _showMyDialog();
 
                                   setState(() {
+                                    _bookName.clear();
+                                    _bookDescription.clear();
                                     _selected.clear();
+                                    _author.clear();
                                   });
                                   image.imageFile = null;
-
-                                  _formKey.currentState.reset();
                                 }
                               }
                             }),
