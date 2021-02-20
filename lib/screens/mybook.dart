@@ -47,12 +47,12 @@ class MyBook extends StatelessWidget {
                         child: Row(
                           children: [
                             Expanded(
-                                child: FlatButton(
-                                    child: Image.network(document['image']),
-                                    onPressed: () {
-                                      var bookId = document.documentID;
-                                      Navigator.of(context)
-                                          .push(PageRouteBuilder(
+                              child: FlatButton(
+                                  child: Image.network(document['image']),
+                                  onPressed: () {
+                                    var bookId = document.documentID;
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
                                         pageBuilder: (context, animation,
                                                 secondaryAnimation) =>
                                             EverybookInfo(bookId),
@@ -66,8 +66,10 @@ class MyBook extends StatelessWidget {
                                             child: _,
                                           );
                                         },
-                                      ));
-                                    })),
+                                      ),
+                                    );
+                                  }),
+                            ),
                             Expanded(
                               child: Container(
                                 padding: EdgeInsets.all(7.0),
@@ -96,7 +98,12 @@ class MyBook extends StatelessWidget {
                                     FlatButton(
                                       color: Colors.white,
                                       child: Text("Delete"),
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await Firestore.instance
+                                            .collection('books')
+                                            .document('${document.documentID}')
+                                            .delete();
+                                      },
                                     ),
                                   ],
                                 ),

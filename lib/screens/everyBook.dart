@@ -1,3 +1,5 @@
+import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
+import 'package:bool_chain_v2/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -63,7 +65,91 @@ class EverybookInfo extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 18, color: Colors.white),
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+                                var id = '2';
+                                // int exist;
+                                List<DocumentSnapshot> documentList;
+                                documentList = (await _bookStore
+                                        .collection('group')
+                                        .where('member0', whereIn: [
+                                  snapshot.data['bookOwner'],
+                                  userUID
+                                ]).where('member1', whereIn: [
+                                  snapshot.data['bookOwner'],
+                                  userUID
+                                ]).getDocuments())
+                                    .documents;
+                                print(userUID);
+                                documentList.map((e) => id = e['id']);
+
+                                // await _bookStore
+                                //     .collection('group')
+                                //     .where('members',
+                                //         arrayContains:
+                                //             ' ${snapshot.data['bookOwner']}')
+                                //     .getDocuments()
+                                //     .then((value) async {
+                                //   if (value.documents.isNotEmpty) {
+                                //     await _bookStore
+                                //         .collection('group')
+                                //         .where('members',
+                                //             arrayContains: '$userUID')
+                                //         .getDocuments()
+                                //         .then(
+                                //           (value) => {
+                                //             if (value.documents.isNotEmpty)
+                                //               {
+                                //                 value.documents
+                                //                     .asMap()
+                                //                     .forEach((key, value) {
+                                //                   id = value.data['id']
+                                //                       .toString();
+                                //                 })
+                                //               }
+                                //           },
+                                //         );
+                                //   }
+                                // });
+                                if (id == '2') {
+                                  await _bookStore.collection('group').add({
+                                    'createdAt': FieldValue.serverTimestamp(),
+                                    'lastModified':
+                                        FieldValue.serverTimestamp(),
+                                    'member0':
+                                      snapshot.data['bookOwner'],
+                                    'member1':  userUID
+                                    ],
+                                    'recentMessage': [
+                                      'Hello!Can we talk about books you uploaded?',
+                                      userUID
+                                    ],
+                                    'sender': userUID
+                                  }).then((value) => id = value.documentID);
+                                  await _bookStore
+                                      .collection('group')
+                                      .document(id)
+                                      .updateData({'id': id});
+                                }
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        ChatScreen(
+                                      messageId: id,
+                                    ),
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, _) {
+                                      return ScaleTransition(
+                                        scale: animation,
+                                        alignment: Alignment.center,
+                                        child: _,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ],
