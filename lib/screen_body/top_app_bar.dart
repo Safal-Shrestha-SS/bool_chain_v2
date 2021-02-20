@@ -12,13 +12,13 @@ class TopAppBar1 extends StatelessWidget {
       title: Row(
         children: <Widget>[
           Text(
-            'Book_Chain',
+            'Book Share',
             style: TextStyle(fontSize: 20.0),
           ),
           Flexible(child: SizedBox(width: double.infinity)),
           IconButton(
             icon: Icon(Icons.search),
-            tooltip: 'Add new entry',
+            tooltip: 'Search',
             onPressed: () {
               showSearch(context: context, delegate: Search());
             },
@@ -32,9 +32,9 @@ class TopAppBar1 extends StatelessWidget {
       ),
       bottom: TabBar(
         tabs: <Widget>[
-          Tab(text: "home"),
+          Tab(text: "Home"),
           Tab(
-            text: "back",
+            text: "inStock",
           )
         ],
       ),
@@ -53,13 +53,13 @@ class TopAppBar2 extends StatelessWidget {
       title: Row(
         children: <Widget>[
           Text(
-            'Book_Chain',
+            'Book Share',
             style: TextStyle(fontSize: 20.0),
           ),
           Flexible(child: SizedBox(width: double.infinity)),
           IconButton(
             icon: Icon(Icons.search),
-            tooltip: 'Add new entry',
+            tooltip: 'Search',
             onPressed: () {
               showSearch(context: context, delegate: Search());
             },
@@ -78,7 +78,14 @@ class TopAppBar2 extends StatelessWidget {
 //Search Operations Below
 
 class Search extends SearchDelegate<String> {
-  final history = ['Nepal', 'India', 'Corona', 'PaniPuri'];
+  final history = [
+    'The Alchemist',
+    'Harry Porter',
+    'The Da Vinci Code',
+    'Heidi',
+    'Jaws',
+    'World War'
+  ];
   @override
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);

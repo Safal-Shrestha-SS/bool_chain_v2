@@ -29,22 +29,22 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Theme.of(context).primaryColor,
+        color: Colors.blue,
         child: Center(
           child: TweenAnimationBuilder(
             duration: Duration(milliseconds: 2000),
             tween: Tween<double>(begin: 0, end: 1),
-            curve: Curves.bounceOut,
+            curve: Curves.bounceIn,
             builder: (context, value, child) {
               return Center(
                 child: Hero(
                   tag: 'lofo',
                   child: Text(
-                    'Book_Chain',
+                    'Book Share',
                     style: TextStyle(
                         inherit: false,
                         fontSize: 30 * value,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
                 ),

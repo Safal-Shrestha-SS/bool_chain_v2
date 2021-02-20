@@ -58,11 +58,6 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Material(
               child: Consumer<ImageCapture>(builder: (context, image, child) {
             return Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                Theme.of(context).primaryColor,
-                Colors.transparent
-              ])),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Form(
@@ -77,14 +72,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             height: 20,
                           ),
                           Text(
-                            'Book_Chain',
+                            'Book Share',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 inherit: false,
                                 fontSize: 40,
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
+                          SizedBox(height: 20),
                           TextFormField(
                             autofocus: true,
                             style: TextStyle(color: Colors.black),
@@ -126,6 +122,17 @@ class _SignUpPageState extends State<SignUpPage> {
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(30)
                             ],
+                            validator: (val) {
+                              String msg;
+                              if (val != _password) {
+                                msg = 'Password do not match';
+                              } else if (val.length <= 7)
+                                msg =
+                                    "Password must be longer than 7 character";
+                              else
+                                msg = null;
+                              return msg;
+                            },
                             onSaved: (value) => _password = value,
                           ),
                           TextFormField(

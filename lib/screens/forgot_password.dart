@@ -22,11 +22,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ),
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Theme.of(context).primaryColor,
-            Colors.transparent
-          ])),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -39,11 +34,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       topLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20),
                     ),
-                    color: Colors.indigo,
+                    color: Colors.blue,
                   ),
                   child: TextField(
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.white),
                     decoration: kformDecoration.copyWith(
                       errorMaxLines: 1,
                       hintText: "Enter your email",

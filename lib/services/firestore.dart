@@ -16,7 +16,7 @@ class FireStoreService {
       final docRef = Firestore.instance.collection('books');
       print(book.bookName);
       docRef.add({
-        'available': book.availabe,
+        'available': book.bookAvailable,
         'bookOwner': book.bookOwner,
         'image': book.image,
         'bookName': book.bookName,
@@ -24,7 +24,6 @@ class FireStoreService {
         'bookRating': book.bookRating,
         'genres': book.genres,
         'time': FieldValue.serverTimestamp(),
-        'numofRating': book.numofReview,
         "bookDescription": book.bookDescription,
       });
     }

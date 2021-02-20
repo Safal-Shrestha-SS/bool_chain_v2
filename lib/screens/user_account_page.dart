@@ -60,7 +60,7 @@ class _UserAccountPageState extends State<UserAccountPage> {
                   itemBuilder: (BuildContext ctxt, int index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Fxirst Book'),
+                      child: Text('First Book'),
                     );
                   }),
             ),

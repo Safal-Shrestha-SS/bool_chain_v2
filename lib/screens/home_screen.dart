@@ -1,8 +1,11 @@
+import 'package:bool_chain_v2/screens/everyBook.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bool_chain_v2/screen_body/top_app_bar.dart';
 import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
 import 'package:bool_chain_v2/screen_body/home.dart';
-// import 'package:flutter/schedulr.dart' show timeDilation;
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -11,10 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // timeDilation=3.0;
   @override
   Widget build(BuildContext context) {
-    // timeDilation = 1;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -27,20 +28,137 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           body: TabBarView(physics: NeverScrollableScrollPhysics(), children: [
             Container(
-              color: Colors.red,
-              child: ListView.builder(
-                itemExtent: 250.0,
-                itemBuilder: (context, index) => Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: Material(
-                    elevation: 4.0,
-                    borderRadius: BorderRadius.circular(5.0),
-                    color: index % 2 == 0 ? Colors.cyan : Colors.deepOrange,
-                    child: Center(
-                      child: Text(index.toString()),
+              child: StreamBuilder(
+                stream: Firestore.instance.collection('books').snapshots(),
+                // ignore: missing_return
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Container(
+                    child: ListView(
+                      children: snapshot.data.documents.map((document) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(35.0),
+                                bottomRight: Radius.circular(35.0)),
+                          ),
+                          elevation: 8.0,
+                          margin: new EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.blue,
+                                    Colors.lightBlueAccent
+                                  ]),
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(35.0),
+                                  bottomRight: Radius.circular(35.0)),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: FlatButton(
+                                        child: Image.network(document['image']),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 500),
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                EverybookInfo(
+                                                    document.documentID),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                _) {
+                                              return ScaleTransition(
+                                                scale: animation,
+                                                alignment: Alignment.center,
+                                                child: _,
+                                              );
+                                            },
+                                          ));
+                                        })),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.all(7.0),
+                                    child: Column(
+                                      children: [
+                                        Center(
+                                            child: Text(
+                                          document["bookName"],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 30,
+                                              color: Colors.black),
+                                        )),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text("Author",
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.black)),
+                                        Text(document['bookAuthor'],
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.black)),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          "Rating",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            RatingBar.builder(
+                                              onRatingUpdate: null,
+                                              ignoreGestures: true,
+                                              initialRating:
+                                                  document['bookRating'],
+                                              minRating: 0,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemSize: 25,
+                                              itemBuilder:
+                                                  (context, snapshot) => Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
             Home(),

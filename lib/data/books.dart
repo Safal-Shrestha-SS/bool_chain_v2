@@ -1,22 +1,22 @@
 class Book {
   String bookAuthor, bookName, image, bookDescription, bookOwner, currentHolder;
   List<String> genres;
-  double bookRating, numofReview;
-  bool availabe;
+  double bookRating;
+  bool bookAvailable;
+  int price;
   Book({
-    this.availabe,
+    this.bookAvailable,
     this.image,
     this.bookName,
     this.bookAuthor,
-    this.bookRating,
+    this.bookRating = 0,
     this.genres,
     this.bookDescription,
     this.bookOwner,
     this.currentHolder,
-    this.numofReview = 0,
+    this.price,
   });
 }
-
 // Future<void> addRestaurant(Book book) {
 //   final restaurants = Firestore.instance.collection('books');
 //   return restaurants.add({

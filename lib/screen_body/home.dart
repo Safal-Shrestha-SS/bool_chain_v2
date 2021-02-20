@@ -1,8 +1,6 @@
 import 'package:bool_chain_v2/screen_body/book_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bool_chain_v2/data/books.dart';
-//import 'package:bool_chain_v2/screen_body/book_info.dart';
-// import 'package:bool_chain_v2/screens/home_screen.dart';
 
 class Home extends StatelessWidget {
   @override

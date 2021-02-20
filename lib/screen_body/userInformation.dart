@@ -1,11 +1,6 @@
-// import 'package:bool_chain_v2/services/firebase_auth_service.dart';
-// import 'package:bool_chain_v2/services/firestorage.dart';
-// import 'package:bool_chain_v2/services/image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'navigation_sidebar.dart';
-// import 'package:geolocator/geolocator.dart';
 
 final _firestore = Firestore.instance;
 
@@ -71,7 +66,7 @@ class _UserInformationState extends State<UserInformation> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.volume_up),
+                          leading: Icon(Icons.broken_image),
                           title: Text('User Bio'),
                           subtitle: Text("${snapshot.data['userBio']}"),
                         ),
@@ -86,7 +81,7 @@ class _UserInformationState extends State<UserInformation> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.location_searching),
+                          leading: Icon(Icons.location_on),
                           title: Text('User Location'),
                           subtitle: Text("${snapshot.data['userAddress']}"),
                         ),

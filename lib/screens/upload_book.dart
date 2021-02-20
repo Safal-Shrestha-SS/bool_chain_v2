@@ -108,7 +108,6 @@ class _UploadBookState extends State<UploadBook> {
             builder: (context, image, child) {
               return Form(
                 key: _formKey,
-                autovalidate: true,
                 child: Stack(
                   children: [
                     ListView(
@@ -213,18 +212,21 @@ class _UploadBookState extends State<UploadBook> {
                           children: <Widget>[
                             for (var ip in _selected)
                               Container(
-                                height: 20,
+                                height: 25,
                                 decoration: BoxDecoration(
-                                    color: Colors.redAccent,
+                                    color: Colors.white,
                                     border: Border.all(
-                                      color: Colors.black,
+                                      color: Colors.blue,
                                     ),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
                                 child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text('  $ip  '),
+                                      Text(
+                                        '  $ip  ',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
                                       GestureDetector(
                                           onTap: () {
                                             setState(() {
@@ -295,7 +297,11 @@ class _UploadBookState extends State<UploadBook> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         RaisedButton(
-                            child: const Text('Submit'),
+                            child: const Text(
+                              'Submit',
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 20),
+                            ),
                             onPressed: () async {
                               book.genres = _selected;
                               book.bookOwner =

@@ -31,11 +31,6 @@ class _LogInPageState extends State<LogInPage> {
           child: Container(
             alignment: Alignment.center,
             height: double.infinity,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Theme.of(context).primaryColor,
-              Colors.transparent
-            ])),
             width: double.infinity,
             child: SingleChildScrollView(
               child: Column(
@@ -44,31 +39,31 @@ class _LogInPageState extends State<LogInPage> {
                   Hero(
                     tag: 'lofo',
                     child: Text(
-                      'Book_Chain',
+                      'Book Share',
                       style: TextStyle(
                           inherit: false,
-                          fontSize: 40,
-                          color: Colors.white,
+                          fontSize: 50,
+                          color: Colors.red,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
-                    height: 24.0,
+                    height: 30.0,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 35,
-                        width: 250,
+                        height: 45,
+                        width: MediaQuery.of(context).size.width - 60,
                         decoration: kcontainerDecoration,
                         child: Center(
                           child: TextField(
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.black),
-                            decoration: kformDecoration.copyWith(
-                              hintText: "Enter your email",
+                            decoration: InputDecoration(
+                              hintText: "Enter your Email",
                             ),
                             onChanged: (value) {
                               email = value;
@@ -77,11 +72,11 @@ class _LogInPageState extends State<LogInPage> {
                         ),
                       ),
                       SizedBox(
-                        height: 24.0,
+                        height: 40.0,
                       ),
                       Container(
-                        height: 35,
-                        width: 250,
+                        height: 45,
+                        width: MediaQuery.of(context).size.width - 60,
                         decoration: kcontainerDecoration,
                         child: TextField(
                           onChanged: (value) {
@@ -97,6 +92,9 @@ class _LogInPageState extends State<LogInPage> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 18,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -122,7 +120,6 @@ class _LogInPageState extends State<LogInPage> {
                             } catch (e) {
                               setState(() {
                                 _error = e.message;
-                                print('hello error');
                                 spinner = false;
                                 Scaffold.of(context).showSnackBar(SnackBar(
                                   content: Text("Error: $_error"),
@@ -152,22 +149,28 @@ class _LogInPageState extends State<LogInPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                          child: Text("Forgot password?"),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPassword(),
-                              ),
-                            );
-                          }),
+                        child: Text(
+                          "Forgot password?",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPassword(),
+                            ),
+                          );
+                        },
+                      ),
                       SizedBox(
-                        width: 30,
+                        width: 25,
                       ),
                       GestureDetector(
-                        child: Text("Sign Up"),
+                        child: Text(
+                          "Sign up",
+                          style: TextStyle(fontSize: 15),
+                        ),
                         onTap: () {
-                          print('nsasdfghjk');
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
@@ -178,11 +181,14 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       RotateAnimatedTextKit(
-                        text: ["READ  ", "SHARE", "ENJOY"],
+                        text: [" READ ", "SHARE", "ENJOY"],
                         textStyle:
                             TextStyle(fontSize: 20.0, fontFamily: "Horizon"),
                         textAlign: TextAlign.start,
@@ -190,7 +196,7 @@ class _LogInPageState extends State<LogInPage> {
                         repeatForever: true,
                       ),
                       SizedBox(width: 10),
-                      Text('Book')
+                      Text('BOOKS')
                     ],
                   )
                 ],
