@@ -65,6 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      style: TextStyle(color: Colors.black),
                       controller: messageTextController,
                       onChanged: (value) {
                         messageText = value; //Do something with the user input.
@@ -73,6 +74,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   FlatButton(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.blue,
+                            width: 1,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(50)),
                     onPressed: () {
                       messageTextController.clear();
                       _fireStore
@@ -81,8 +88,15 @@ class _ChatScreenState extends State<ChatScreen> {
                           .collection('messages')
                           .add({
                         'text': messageText,
-                        'sender': loggedInUser.uid,
+                        'senderID': loggedInUser.uid,
+                        'sender': loggedInUser.email,
                         'time': FieldValue.serverTimestamp()
+                      });
+                      _fireStore
+                          .collection('group')
+                          .document(widget.messageId)
+                          .updateData({
+                        'recentMessage': ['messageText', loggedInUser.uid],
                       });
                     },
                     child: Text(
@@ -124,11 +138,12 @@ class MessageStream extends StatelessWidget {
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           final messageText = message.data['text'];
-          final messageSender = message.data['sender'];
-          final currentUser = loggedInUser.email;
+          final messageSender = message.data['senderID'];
+          final currentUser = loggedInUser.uid;
+          final messageSenderName = message.data['sender'];
           final messageBubble = MessageBubble(
               text: messageText,
-              sender: messageSender,
+              sender: messageSenderName,
               isMe: currentUser == messageSender);
           messageBubbles.add(messageBubble);
         }

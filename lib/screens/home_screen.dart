@@ -67,27 +67,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Expanded(
                                     child: FlatButton(
-                                        child: Image.network(document['image']),
+                                        child: Hero(
+                                            tag: document.documentID,
+                                            child: Image.network(
+                                                document['image'])),
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .push(PageRouteBuilder(
-                                            transitionDuration:
-                                                Duration(milliseconds: 500),
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                EverybookInfo(
-                                                    document.documentID),
-                                            transitionsBuilder: (context,
-                                                animation,
-                                                secondaryAnimation,
-                                                _) {
-                                              return ScaleTransition(
-                                                scale: animation,
-                                                alignment: Alignment.center,
-                                                child: _,
-                                              );
-                                            },
-                                          ));
+                                          Navigator.of(context).push(
+                                            // BuildContext context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EverybookInfo(
+                                                      document.documentID),
+                                            ),
+                                          );
                                         })),
                                 Expanded(
                                   child: Container(
