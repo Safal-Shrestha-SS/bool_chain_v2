@@ -1,5 +1,9 @@
+import 'package:bool_chain_v2/screens/chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bool_chain_v2/data/books.dart';
+
+// import 'package:bool_chain_v2/data/books.dart';
+var book;
 
 class TopAppBar1 extends StatelessWidget {
   @override
@@ -24,9 +28,14 @@ class TopAppBar1 extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Icon(Icons.portrait),
+            icon: Icon(Icons.chat_bubble_outline),
             tooltip: 'Add new entry',
-            onPressed: () {/* ... */},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Chat()),
+              );
+            },
           ),
         ],
       ),
@@ -42,40 +51,58 @@ class TopAppBar1 extends StatelessWidget {
   }
 }
 
-class TopAppBar2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      elevation: 1.0,
-      pinned: false,
-      floating: true,
-      snap: false,
-      title: Row(
-        children: <Widget>[
-          Text(
-            'Book Share',
-            style: TextStyle(fontSize: 20.0),
-          ),
-          Flexible(child: SizedBox(width: double.infinity)),
-          IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () {
-              showSearch(context: context, delegate: Search());
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.portrait),
-            tooltip: 'Add new entry',
-            onPressed: () {/* ... */},
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class TopAppBar2 extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return SliverAppBar(
+//       elevation: 1.0,
+//       pinned: false,
+//       floating: true,
+//       snap: false,
+//       title: Row(
+//         children: <Widget>[
+//           Text(
+//             'Book Share',
+//             style: TextStyle(fontSize: 20.0),
+//           ),
+//           Flexible(child: SizedBox(width: double.infinity)),
+//           IconButton(
+//             icon: Icon(Icons.search),
+//             tooltip: 'Search',
+//             onPressed: () {
+//               showSearch(context: context, delegate: Search());
+//             },
+//           ),
+//           GestureDetector(
+//             onTap: () {
+//               print('safal');
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(builder: (context) => Chat()),
+//               );
+//             },
+//             child: Icon(Icons.chat_bubble),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 //Search Operations Below
+List<DocumentSnapshot> documentList;
+List f = new List();
+
+searchByName(String searchField) async {
+  documentList = (await Firestore.instance
+          .collection('books')
+          .where('search', isEqualTo: searchField.substring(0, 1).toUpperCase())
+          .getDocuments())
+      .documents;
+  documentList.asMap().forEach((key, value) {
+    f.add(value.data['bookName']);
+  });
+}
 
 class Search extends SearchDelegate<String> {
   final history = [
@@ -86,6 +113,10 @@ class Search extends SearchDelegate<String> {
     'Jaws',
     'World War'
   ];
+  var tempSearchStore = [];
+
+  var queryResultSet = [];
+
   @override
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
@@ -127,14 +158,39 @@ class Search extends SearchDelegate<String> {
   }
 
   @override
-  //to provide suggestion for faster search
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty
-        ? history
-        : books
-            .where((element) =>
-                element.toLowerCase().startsWith(query.toLowerCase()))
-            .toList();
+    searchByName(query);
+    final suggestionList = (query.isEmpty
+            ? history
+            : f.where((element) =>
+                element.toLowerCase().startsWith(query.toLowerCase())))
+        .toList();
+//             .toList(););
+    // if (query.length == 0) {
+    //   queryResultSet = [];
+    //   tempSearchStore = [];
+    // }
+
+    // if (queryResultSet.length == 0 && query.length == 1) {
+    //   SearchService().searchByName(query).then((QuerySnapshot docs) {
+    //     for (int i = 0; i < (docs.documents.length) ; ++i) {
+    //       queryResultSet.add(docs.documents[i].data);
+    //       // suggestionList.add(docs.documents[i].data['bookName']);
+
+    //     }
+    //   });
+    // } else {
+    //   tempSearchStore = [];
+    //   queryResultSet.forEach((element) {
+    //     if (element['bookName'].toLowerCase().startsWith(query.toLowerCase())) {
+    //       tempSearchStore.add(element['bookName']);
+    //       print(element['bookName']);
+    //     }
+    //   });
+    // }
+    // final suggestionList = tempSearchStore;
+    // print(suggestionList.length);
+
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         onTap: () {
@@ -157,3 +213,34 @@ class Search extends SearchDelegate<String> {
     );
   }
 }
+
+//to provide suggestion for faster search
+//   Widget buildSuggestions(BuildContext context) {
+//     final suggestionList = query.isEmpty
+//         ? history
+//         : books
+//             .where((element) =>
+//                 element.toLowerCase().startsWith(query.toLowerCase()))
+//             .toList();
+//     return ListView.builder(
+//       itemBuilder: (context, index) => ListTile(
+//         onTap: () {
+//           query = suggestionList[index];
+//           showResults(context);
+//         },
+//         leading: Icon(Icons.book),
+//         title: RichText(
+//             text: TextSpan(
+//                 text: suggestionList[index].substring(0, query.length),
+//                 style:
+//                     TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+//                 children: [
+//               TextSpan(
+//                   text: suggestionList[index].substring(query.length),
+//                   style: TextStyle(color: Colors.grey))
+//             ])),
+//       ),
+//       itemCount: suggestionList.length,
+//     );
+//   }
+// }

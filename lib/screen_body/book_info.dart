@@ -13,7 +13,7 @@ class BookInfo extends StatelessWidget {
         drawer: Drawer(child: Navigation()),
         body: CustomScrollView(
           slivers: [
-            TopAppBar2(),
+            TopAppBar1(),
             SliverFillRemaining(
               hasScrollBody: true,
               child: Column(

@@ -1,4 +1,5 @@
 import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
+
 import 'package:bool_chain_v2/screens/chat_screen.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,15 @@ class EverybookInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var a = Provider.of<FirebaseAuthService>(context);
+    void getuserID() async {
+      var h = await a.getCurrentUser();
+      g = h.uid;
+      n = h.email;
+      print(n);
+      print(g);
+    }
+
+    getuserID();
     return Scaffold(
       appBar: AppBar(),
       body: StreamBuilder<DocumentSnapshot>(
@@ -27,15 +37,6 @@ class EverybookInfo extends StatelessWidget {
           final date = [dateTime.day, dateTime.month, dateTime.year];
           final bookOwner = snapshot.data['bookOwner'];
 
-          void getuserID() async {
-            var h = await a.getCurrentUser();
-            g = h.uid;
-            n = h.email;
-            print(n);
-            print(g);
-          }
-
-          getuserID();
           return SingleChildScrollView(
               child: SafeArea(
             child: Column(
@@ -93,6 +94,7 @@ class EverybookInfo extends StatelessWidget {
                                       List f = new List();
                                       f.add(g);
                                       f.add(snapshot.data['bookOwner']);
+                                      print('members ${f[0]}  and ${f[1]}');
                                       print(snapshot.data['bookOwner']);
                                       documentList = (await _bookStore
                                               .collection('group')
@@ -110,34 +112,6 @@ class EverybookInfo extends StatelessWidget {
                                         }
                                       });
 
-                                      // await _bookStore
-                                      //     .collection('group')
-                                      //     .where('members',
-                                      //         arrayContains:
-                                      //             ' ${snapshot.data['bookOwner']}')
-                                      //     .getDocuments()
-                                      //     .then((value) async {
-                                      //   if (value.documents.isNotEmpty) {
-                                      //     await _bookStore
-                                      //         .collection('group')
-                                      //         .where('members',
-                                      //             arrayContains: '$userUID')
-                                      //         .getDocuments()
-                                      //         .then(
-                                      //           (value) => {
-                                      //             if (value.documents.isNotEmpty)
-                                      //               {
-                                      //                 value.documents
-                                      //                     .asMap()
-                                      //                     .forEach((key, value) {
-                                      //                   id = value.data['id']
-                                      //                       .toString();
-                                      //                 })
-                                      //               }
-                                      //           },
-                                      //         );
-                                      //   }
-                                      // });
                                       if (id == '2') {
                                         await _bookStore
                                             .collection('group')
@@ -149,10 +123,12 @@ class EverybookInfo extends StatelessWidget {
                                           'member0': snapshot.data['bookOwner'],
                                           'member1': g,
                                           'recentMessage': [
-                                            'Hello!Can we talk about books you uploaded?',
+                                            'Hello!Can we talk about "📘${snapshot.data['bookName']}" you uploaded?',
                                             g
                                           ],
-                                          'sender': g
+                                          'senderID': g,
+                                          'sender': n,
+                                          'seen': 0
                                         }).then((value) {
                                           print('safal');
                                           id = value.documentID;
@@ -167,10 +143,11 @@ class EverybookInfo extends StatelessWidget {
                                             .collection('messages')
                                             .add({
                                           'text':
-                                              'Hello!Can we talk about books you uploaded?',
+                                              'Hello!Can we talk about "📘${snapshot.data['bookName']}"  you uploaded?',
                                           'senderID': g,
                                           'sender': n,
-                                          'time': FieldValue.serverTimestamp()
+                                          'time': FieldValue.serverTimestamp(),
+                                          'seen': 0
                                         });
                                       }
                                       Navigator.of(context).push(
@@ -184,7 +161,7 @@ class EverybookInfo extends StatelessWidget {
                                       print(id);
                                     },
                                   )
-                                : Text('j'),
+                                : Text(' '),
                           ),
                         ],
                       ),

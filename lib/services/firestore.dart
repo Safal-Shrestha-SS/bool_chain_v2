@@ -25,6 +25,7 @@ class FireStoreService {
         'genres': book.genres,
         'time': FieldValue.serverTimestamp(),
         "bookDescription": book.bookDescription,
+        'search': book.bookName.substring(0, 1).toUpperCase()
       });
     }
   }
