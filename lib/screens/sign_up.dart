@@ -457,7 +457,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             Text(
                               '$_counter',
-                              style: Theme.of(context).textTheme.headline4,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 40),
                             ),
                           ],
                         ),

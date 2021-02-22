@@ -8,6 +8,7 @@ class MyBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
         title: Text("Posted Books"),
       ),
       body: Container(
@@ -74,15 +75,15 @@ class MyBook extends StatelessWidget {
                               child: Container(
                                 padding: EdgeInsets.all(7.0),
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Center(
-                                        child: Text(
+                                    Text(
                                       document["bookName"],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 30,
                                           color: Colors.black),
-                                    )),
+                                    ),
                                     SizedBox(
                                       height: 20,
                                     ),
