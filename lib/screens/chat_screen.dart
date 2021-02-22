@@ -95,7 +95,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           .collection('group')
                           .document(widget.messageId)
                           .updateData({
-                        'recentMessage': ['messageText', loggedInUser.uid],
+                        'recentMessage': [messageText, loggedInUser.uid],
+                        'seen': 0
                       });
                     },
                     child: Text(

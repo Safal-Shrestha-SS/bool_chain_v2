@@ -35,7 +35,6 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     print('safal');
 
-    print(loggedInUser.uid);
     return Scaffold(
         appBar: AppBar(
           leading: null,

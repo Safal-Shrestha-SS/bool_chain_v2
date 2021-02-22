@@ -1,5 +1,6 @@
 import 'package:bool_chain_v2/screens/home_screen.dart';
 import 'package:bool_chain_v2/screens/log_in_screen.dart';
+import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +19,16 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
       return false;
   }
 
+  FirebaseAuthService df = FirebaseAuthService();
+  Future<bool> isVerified() async {
+    if (await df.isEmailVerified()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool doubleCheck;
   bool check;
   @override
   void initState() {
@@ -52,7 +63,8 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
             },
             onEnd: () async {
               check = await isLoggedIN();
-              if (check) {
+              doubleCheck = await isVerified();
+              if (check == true && doubleCheck == true) {
                 print('logged in');
                 Navigator.of(context).pushReplacement(PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 800),

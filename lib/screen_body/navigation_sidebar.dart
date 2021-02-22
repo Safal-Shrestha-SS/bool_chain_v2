@@ -12,6 +12,7 @@ import 'aboutBookShare.dart';
 var userUID;
 String userName;
 final _firestore = Firestore.instance;
+var userImage;
 
 class Navigation extends StatelessWidget {
   final FirebaseAuthService _auth = FirebaseAuthService();
@@ -20,16 +21,30 @@ class Navigation extends StatelessWidget {
     var user = (await _auth.getCurrentUser());
     userUID = user.uid;
     var af = await _firestore.collection('users').document(user.uid).get();
+    userImage = af.data['image'];
     print(user.email);
     var afa = af.data['userName'];
+
     userName = afa;
-    print(afa);
+    print(userImage);
 
     return afa;
   }
 
+  Future getURL() async {
+    var user = (await _auth.getCurrentUser());
+    userUID = user.uid;
+    var af = await _firestore.collection('users').document(user.uid).get();
+    userImage = af.data['image'];
+
+    print(userImage);
+
+    return userImage;
+  }
+
   @override
   Widget build(BuildContext context) {
+    getdocumentId();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.all(0),
@@ -47,15 +62,22 @@ class Navigation extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 5),
-                  CircleAvatar(
-                    child: Icon(
-                      Icons.account_circle,
-                      size: 60,
-                      color: Colors.blue,
-                    ),
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                  ),
+                  FutureBuilder(
+                      future: getURL(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.white,
+                          );
+                        } else {
+                          return CircleAvatar(
+                            backgroundImage: NetworkImage(userImage),
+                            radius: 30,
+                            backgroundColor: Colors.white,
+                          );
+                        }
+                      }),
                   SizedBox(
                     height: 10,
                   ),
@@ -76,19 +98,10 @@ class Navigation extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 400),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    UploadBook(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, _) {
-                  return ScaleTransition(
-                    scale: animation,
-                    alignment: Alignment.center,
-                    child: _,
-                  );
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UploadBook()),
+              );
             },
           ),
           ListTile(
@@ -118,19 +131,10 @@ class Navigation extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 600),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    AboutApp(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, _) {
-                  return ScaleTransition(
-                    scale: animation,
-                    alignment: Alignment.center,
-                    child: _,
-                  );
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutApp()),
+              );
             },
           ),
           ListTile(
@@ -165,19 +169,10 @@ class Navigation extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 600),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    MyBook(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, _) {
-                  return ScaleTransition(
-                    scale: animation,
-                    alignment: Alignment.center,
-                    child: _,
-                  );
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyBook()),
+              );
             },
           ),
           Consumer<FirebaseAuthService>(

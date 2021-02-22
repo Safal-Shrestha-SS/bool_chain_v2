@@ -1,9 +1,14 @@
 import 'package:bool_chain_v2/screens/chat.dart';
+import 'package:bool_chain_v2/screens/everyBook.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // import 'package:bool_chain_v2/data/books.dart';
 var book;
+List<DocumentSnapshot> documentList;
+List f = new List();
+List g = new List();
+var p = new Map();
 
 class TopAppBar1 extends StatelessWidget {
   @override
@@ -23,7 +28,17 @@ class TopAppBar1 extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.search),
             tooltip: 'Search',
-            onPressed: () {
+            onPressed: () async {
+              documentList =
+                  (await Firestore.instance.collection('books').getDocuments())
+                      .documents;
+              documentList.asMap().forEach((key, value) {
+                f.add(value.data['bookName']);
+                g.add(value.documentID);
+              });
+              for (int i = 0; i < f.length; i++) {
+                p[f[i]] = g[i];
+              }
               showSearch(context: context, delegate: Search());
             },
           ),
@@ -90,29 +105,20 @@ class TopAppBar1 extends StatelessWidget {
 // }
 
 //Search Operations Below
-List<DocumentSnapshot> documentList;
-List f = new List();
-
-searchByName(String searchField) async {
-  documentList = (await Firestore.instance
-          .collection('books')
-          .where('search', isEqualTo: searchField.substring(0, 1).toUpperCase())
-          .getDocuments())
-      .documents;
-  documentList.asMap().forEach((key, value) {
-    f.add(value.data['bookName']);
-  });
-}
+// for optimization purpose for furthur dev
+// searchByName(String searchField) async {
+//   documentList = (await Firestore.instance
+//           .collection('books')
+//           .where('search', isEqualTo: searchField.substring(0, 1).toUpperCase())
+//           .getDocuments())
+//       .documents;
+//   documentList.asMap().forEach((key, value) {
+//     f.add(value.data['bookName']);
+//   });
+// }
 
 class Search extends SearchDelegate<String> {
-  final history = [
-    'The Alchemist',
-    'Harry Porter',
-    'The Da Vinci Code',
-    'Heidi',
-    'Jaws',
-    'World War'
-  ];
+  final history = new List();
   var tempSearchStore = [];
 
   var queryResultSet = [];
@@ -151,45 +157,69 @@ class Search extends SearchDelegate<String> {
   @override
   //to do after search is done
   Widget buildResults(BuildContext context) {
-    return Container(
-      height: 100,
-      child: Card(color: Colors.red, child: Text(query)),
+    final suggestionList = (query.isEmpty
+            ? history
+            : f.toSet().toList().where((element) =>
+                element.toLowerCase().startsWith(query.toLowerCase())))
+        .toList();
+    print(p[query]);
+    if (suggestionList.isEmpty || !suggestionList.contains(query)) {
+      return Center(child: Text('Book not found'));
+    }
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () {
+            print(p[query]);
+            print('sagal');
+            close(context, null);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => EverybookInfo(p[query]),
+              ),
+            );
+            // print(suggestionId[index]);
+          },
+          leading: Icon(Icons.book),
+          title: RichText(
+              text: TextSpan(
+            text: query,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontStyle: FontStyle.italic,
+                fontSize: 20),
+          )),
+        );
+      },
+      itemCount: suggestionList.length,
     );
+    // return ListView.builder(
+    //   itemBuilder: (context, index) => ListTile(
+    //     onTap: () {},
+    //     leading: Icon(Icons.book),
+    //     title: RichText(
+    //         text: TextSpan(
+    //       text: query,
+    //       style: TextStyle(
+    //           fontWeight: FontWeight.bold,
+    //           color: Colors.black,
+    //           fontStyle: FontStyle.italic,
+    //           fontSize: 20),
+    //     )),
+    //   ),
+    //   itemCount: suggestionList.length,
+    // );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    searchByName(query);
-    final suggestionList = (query.isEmpty
+    var suggestionList = new List();
+    suggestionList = (query.isEmpty
             ? history
-            : f.where((element) =>
+            : f.toSet().toList().where((element) =>
                 element.toLowerCase().startsWith(query.toLowerCase())))
         .toList();
-//             .toList(););
-    // if (query.length == 0) {
-    //   queryResultSet = [];
-    //   tempSearchStore = [];
-    // }
-
-    // if (queryResultSet.length == 0 && query.length == 1) {
-    //   SearchService().searchByName(query).then((QuerySnapshot docs) {
-    //     for (int i = 0; i < (docs.documents.length) ; ++i) {
-    //       queryResultSet.add(docs.documents[i].data);
-    //       // suggestionList.add(docs.documents[i].data['bookName']);
-
-    //     }
-    //   });
-    // } else {
-    //   tempSearchStore = [];
-    //   queryResultSet.forEach((element) {
-    //     if (element['bookName'].toLowerCase().startsWith(query.toLowerCase())) {
-    //       tempSearchStore.add(element['bookName']);
-    //       print(element['bookName']);
-    //     }
-    //   });
-    // }
-    // final suggestionList = tempSearchStore;
-    // print(suggestionList.length);
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
@@ -197,7 +227,6 @@ class Search extends SearchDelegate<String> {
           query = suggestionList[index];
           showResults(context);
         },
-        leading: Icon(Icons.book),
         title: RichText(
             text: TextSpan(
                 text: suggestionList[index].substring(0, query.length),
@@ -244,3 +273,27 @@ class Search extends SearchDelegate<String> {
 //     );
 //   }
 // }
+// if (query.length == 0) {
+//   queryResultSet = [];
+//   tempSearchStore = [];
+// }
+
+// if (queryResultSet.length == 0 && query.length == 1) {
+//   SearchService().searchByName(query).then((QuerySnapshot docs) {
+//     for (int i = 0; i < (docs.documents.length) ; ++i) {
+//       queryResultSet.add(docs.documents[i].data);
+//       // suggestionList.add(docs.documents[i].data['bookName']);
+
+//     }
+//   });
+// } else {
+//   tempSearchStore = [];
+//   queryResultSet.forEach((element) {
+//     if (element['bookName'].toLowerCase().startsWith(query.toLowerCase())) {
+//       tempSearchStore.add(element['bookName']);
+//       print(element['bookName']);
+//     }
+//   });
+// }
+// final suggestionList = tempSearchStore;
+// print(suggestionList.length);

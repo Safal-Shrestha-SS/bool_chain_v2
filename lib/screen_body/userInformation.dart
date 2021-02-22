@@ -52,7 +52,10 @@ class _UserInformationState extends State<UserInformation> {
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.account_circle),
-                          title: Text("User Name"),
+                          title: Text(
+                            "User Name",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           subtitle: Text("${snapshot.data['userName']}"),
                         ),
                       ],
@@ -67,7 +70,10 @@ class _UserInformationState extends State<UserInformation> {
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.broken_image),
-                          title: Text('User Bio'),
+                          title: Text(
+                            'User Bio',
+                            style: TextStyle(color: Colors.black),
+                          ),
                           subtitle: Text("${snapshot.data['userBio']}"),
                         ),
                       ],
@@ -82,7 +88,10 @@ class _UserInformationState extends State<UserInformation> {
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.location_on),
-                          title: Text('User Location'),
+                          title: Text(
+                            'User Location',
+                            style: TextStyle(color: Colors.black),
+                          ),
                           subtitle: Text("${snapshot.data['userAddress']}"),
                         ),
                       ],
@@ -97,7 +106,10 @@ class _UserInformationState extends State<UserInformation> {
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.location_on),
-                          title: Text('User GeoCode'),
+                          title: Text(
+                            'User GeoCode',
+                            style: TextStyle(color: Colors.black),
+                          ),
                           subtitle: Text(
                               "${position.latitude},${position.longitude}"),
                         ),
