@@ -196,9 +196,16 @@ class _MessageBubbleState extends State<MessageBubble> {
                   ),
             elevation: 5.0,
             color: widget.isMe ? Colors.lightBlueAccent : Colors.white54,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Text('${widget.text}'),
+            child: Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width / 1.3),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 7.0, vertical: 10.0),
+                child: Text(
+                  '${widget.text}',
+                  textAlign: TextAlign.start,
+                ),
+              ),
             ),
           )
         ],

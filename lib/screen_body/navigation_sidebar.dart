@@ -1,6 +1,7 @@
 import 'package:bool_chain_v2/screens/log_in_screen.dart';
 import 'package:bool_chain_v2/screens/mybook.dart';
 import 'package:bool_chain_v2/screens/upload_book.dart';
+import 'package:bool_chain_v2/screens/wish_list.dart';
 import 'package:bool_chain_v2/services/firebase_auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,7 @@ class Navigation extends StatelessWidget {
               )),
           ListTile(
             leading: Icon(
-              Icons.file_upload,
+              Icons.chat,
               color: Colors.black,
             ),
             title: Text(
@@ -150,14 +151,19 @@ class Navigation extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(
-              Icons.speaker_group,
+              Icons.transfer_within_a_station,
               color: Colors.black,
             ),
             title: Text(
-              "Contact",
+              "Wish List",
               style: TextStyle(color: Colors.black),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WishList()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(

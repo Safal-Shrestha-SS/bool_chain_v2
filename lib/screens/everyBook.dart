@@ -36,7 +36,8 @@ class EverybookInfo extends StatelessWidget {
           final DateTime dateTime = timestamp.toDate();
           final date = [dateTime.day, dateTime.month, dateTime.year];
           final bookOwner = snapshot.data['bookOwner'];
-
+          final genres = snapshot.data['genres'];
+          print(genres);
           return SingleChildScrollView(
               child: SafeArea(
             child: Column(
@@ -88,6 +89,13 @@ class EverybookInfo extends StatelessWidget {
                                           fontSize: 18, color: Colors.white),
                                     ),
                                     onPressed: () async {
+                                      var check = 0;
+                                      await _bookStore
+                                          .collection('users')
+                                          .document(g)
+                                          .get()
+                                          .then((value) => check =
+                                              value.data['noOfBookRequesting']);
                                       var id = '2';
                                       // int exist;
                                       List<DocumentSnapshot> documentList;
@@ -111,53 +119,79 @@ class EverybookInfo extends StatelessWidget {
                                           id = value.documentID;
                                         }
                                       });
-
-                                      if (id == '2') {
-                                        await _bookStore
-                                            .collection('group')
-                                            .add({
-                                          'createdAt':
-                                              FieldValue.serverTimestamp(),
-                                          'lastModified':
-                                              FieldValue.serverTimestamp(),
-                                          'member0': snapshot.data['bookOwner'],
-                                          'member1': g,
-                                          'recentMessage': [
-                                            'Hello! Can we talk about "📘${snapshot.data['bookName']}" you uploaded?',
-                                            g
-                                          ],
-                                          'senderID': g,
-                                          'sender': n,
-                                          'seen': 0
-                                        }).then((value) {
-                                          print('safal');
-                                          id = value.documentID;
-                                        });
-                                        await _bookStore
-                                            .collection('group')
-                                            .document(id)
-                                            .updateData({'id': id});
-                                        await _bookStore
-                                            .collection('message')
-                                            .document(id)
-                                            .collection('messages')
-                                            .add({
-                                          'text':
-                                              'Hello!Can we talk about "📘${snapshot.data['bookName']}"  you uploaded?',
-                                          'senderID': g,
-                                          'sender': n,
-                                          'time': FieldValue.serverTimestamp(),
-                                          'seen': 0
-                                        });
-                                      }
-                                      Navigator.of(context).push(
-                                        // BuildContext context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ChatScreen(
-                                            messageId: id,
+                                      if (id != '2') {
+                                        Navigator.of(context).push(
+                                          // BuildContext context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ChatScreen(
+                                              messageId: id,
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      }
+                                      if (check < 5) {
+                                        if (id == '2') {
+                                          await _bookStore
+                                              .collection('group')
+                                              .add({
+                                            'createdAt':
+                                                FieldValue.serverTimestamp(),
+                                            'lastModified':
+                                                FieldValue.serverTimestamp(),
+                                            'member0':
+                                                snapshot.data['bookOwner'],
+                                            'member1': g,
+                                            'recentMessage': [
+                                              'Hello! Can we talk about "📘${snapshot.data['bookName']}" you uploaded?',
+                                              g
+                                            ],
+                                            'senderID': g,
+                                            'sender': n,
+                                            'seen': 0
+                                          }).then((value) {
+                                            print('safal');
+                                            id = value.documentID;
+                                          });
+                                          await _bookStore
+                                              .collection('group')
+                                              .document(id)
+                                              .updateData({'id': id});
+                                          await _bookStore
+                                              .collection('message')
+                                              .document(id)
+                                              .collection('messages')
+                                              .add({
+                                            'text':
+                                                'Hello!Can we talk about "📘${snapshot.data['bookName']}"  you uploaded?',
+                                            'senderID': g,
+                                            'sender': n,
+                                            'time':
+                                                FieldValue.serverTimestamp(),
+                                            'seen': 0
+                                          });
+                                          await _bookStore
+                                              .collection('users')
+                                              .document(g)
+                                              .updateData({
+                                            'noOfBookRequesting':
+                                                FieldValue.increment(1),
+                                            'wishList': FieldValue.arrayUnion(
+                                                [snapshot.data.documentID])
+                                          });
+                                          Navigator.of(context).push(
+                                            // BuildContext context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ChatScreen(
+                                                messageId: id,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      } else {
+                                        Scaffold.of(context).showSnackBar(SnackBar(
+                                            content: Text(
+                                                'You have reached the limit of 5 books')));
+                                      }
                                       print(id);
                                     },
                                   )
@@ -165,6 +199,30 @@ class EverybookInfo extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                    Wrap(
+                      spacing: 8.0, // gap between adjacent chips
+                      runSpacing: 4.0, // gap between lines
+                      children: <Widget>[
+                        for (var ip in genres)
+                          Container(
+                            height: 25,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child:
+                                Row(mainAxisSize: MainAxisSize.min, children: [
+                              Text(
+                                '  $ip  ',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ]),
+                          ),
+                      ],
                     ),
                     Card(
                       child: Column(
@@ -214,30 +272,39 @@ class EverybookInfo extends StatelessWidget {
                     ),
                     Card(
                       child: Column(
-                        children: [
-                          Text(
-                            "Rating",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                          RatingBar.builder(
-                            ignoreGestures: true,
-                            initialRating: snapshot.data['bookRating'],
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemSize: 25,
-                            itemBuilder: (context, snapshot) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(Icons.stars),
+                            title: Text(
+                              'Rating',
+                              style: TextStyle(color: Colors.black),
                             ),
-                            onRatingUpdate: (double value) {
-                              print(value);
-                            },
-                          ),
-                          Text(
-                            snapshot.data["bookRating"].toString(),
-                            style: TextStyle(fontSize: 25),
+                            subtitle: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RatingBar.builder(
+                                  ignoreGestures: true,
+                                  initialRating: snapshot.data['bookRating'],
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 25,
+                                  itemBuilder: (context, snapshot) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (double value) {
+                                    print(value);
+                                  },
+                                ),
+                                Text(
+                                  snapshot.data["bookRating"].toString(),
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

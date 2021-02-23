@@ -66,21 +66,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child: FlatButton(
-                                        child: Hero(
-                                            tag: document.documentID,
-                                            child: Image.network(
-                                                document['image'])),
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            // BuildContext context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EverybookInfo(
-                                                      document.documentID),
-                                            ),
-                                          );
-                                        })),
+                                    child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  child: GestureDetector(
+                                      child: Hero(
+                                          tag: document.documentID,
+                                          child: Image.network(
+                                            document['image'],
+                                          )),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          // BuildContext context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EverybookInfo(
+                                                document.documentID),
+                                          ),
+                                        );
+                                      }),
+                                )),
                                 Expanded(
                                   child: Container(
                                     padding: EdgeInsets.all(7.0),
@@ -93,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 30,
+                                              fontSize: 20,
                                               color: Colors.black),
                                         ),
                                         SizedBox(

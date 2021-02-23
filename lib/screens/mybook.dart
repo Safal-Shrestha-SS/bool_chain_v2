@@ -81,7 +81,7 @@ class MyBook extends StatelessWidget {
                                       document["bookName"],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 30,
+                                          fontSize: 20,
                                           color: Colors.black),
                                     ),
                                     SizedBox(

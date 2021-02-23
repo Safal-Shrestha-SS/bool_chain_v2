@@ -45,7 +45,7 @@ class TopAppBar1 extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.chat_bubble_outline),
-            tooltip: 'Add new entry',
+            tooltip: 'Chat Room',
             onPressed: () {
               Navigator.push(
                 context,

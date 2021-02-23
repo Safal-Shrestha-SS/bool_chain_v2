@@ -142,11 +142,7 @@ class _MessageState extends State<Message> {
               subtitle: Text(widget.text),
             ),
             Divider(
-<<<<<<< HEAD
-              color: Colors.black,
-=======
               color: Colors.grey,
->>>>>>> d11ca56deae07203686e2542cd27e63e7e43d89a
             )
           ],
         ),
