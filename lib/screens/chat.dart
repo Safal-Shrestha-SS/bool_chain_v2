@@ -132,12 +132,19 @@ class _MessageState extends State<Message> {
             ),
           );
         },
-        child: ListTile(
-          title: Text(
-            widget.sender,
-            style: TextStyle(color: Colors.black),
-          ),
-          subtitle: Text(widget.text),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                widget.sender,
+                style: TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(widget.text),
+            ),
+            Divider(
+              color: Colors.black,
+            )
+          ],
         ),
       ),
     );
