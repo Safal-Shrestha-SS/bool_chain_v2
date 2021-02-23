@@ -85,15 +85,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Container(
                                     padding: EdgeInsets.all(7.0),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Center(
-                                            child: Text(
+                                        Text(
                                           document["bookName"],
+                                          textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 30,
                                               color: Colors.black),
-                                        )),
+                                        ),
                                         SizedBox(
                                           height: 20,
                                         ),
@@ -119,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.start,
                                           children: [
                                             RatingBar.builder(
                                               onRatingUpdate: null,

@@ -67,10 +67,6 @@ class _UploadBookState extends State<UploadBook> {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Hello There',
-                  style: TextStyle(color: Colors.black),
-                ),
-                Text(
                   'Your book has been uploaded.',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -99,6 +95,7 @@ class _UploadBookState extends State<UploadBook> {
       create: (context) => ImageCapture(),
       child: new Scaffold(
         appBar: new AppBar(
+          backgroundColor: Colors.blue,
           title: new Text('Upload Book'),
         ),
         body: SafeArea(
@@ -113,6 +110,9 @@ class _UploadBookState extends State<UploadBook> {
                     ListView(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       children: <Widget>[
+                        SizedBox(
+                          height: 50,
+                        ),
                         if (image.imageFile == null) ...[
                           Center(child: Text('Please upload book image')),
                         ],

@@ -28,7 +28,7 @@ class EverybookInfo extends StatelessWidget {
 
     getuserID();
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(backgroundColor: Colors.blue, title: Text("Book Info")),
       body: StreamBuilder<DocumentSnapshot>(
         stream: _bookStore.collection("books").document(bookId).snapshots(),
         builder: (BuildContext context, snapshot) {
@@ -123,7 +123,7 @@ class EverybookInfo extends StatelessWidget {
                                           'member0': snapshot.data['bookOwner'],
                                           'member1': g,
                                           'recentMessage': [
-                                            'Hello!Can we talk about "📘${snapshot.data['bookName']}" you uploaded?',
+                                            'Hello! Can we talk about "📘${snapshot.data['bookName']}" you uploaded?',
                                             g
                                           ],
                                           'senderID': g,

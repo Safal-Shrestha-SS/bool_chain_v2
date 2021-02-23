@@ -14,6 +14,7 @@ class TopAppBar1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      backgroundColor: Colors.blue,
       elevation: 1.0,
       pinned: true,
       floating: true,
