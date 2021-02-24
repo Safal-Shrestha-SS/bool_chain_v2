@@ -1,10 +1,10 @@
+import 'package:bool_chain_v2/screens/ad_screen.dart';
 import 'package:bool_chain_v2/screens/everyBook.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bool_chain_v2/screen_body/top_app_bar.dart';
 import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
-import 'package:bool_chain_v2/screen_body/home.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            Home(),
+            Container()
           ]),
         ),
       ),

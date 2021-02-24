@@ -273,9 +273,10 @@ class EverybookInfo extends StatelessWidget {
                     Card(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           ListTile(
-                            leading: Icon(Icons.stars),
+                            leading: Icon(Icons.star_border),
                             title: Text(
                               'Rating',
                               style: TextStyle(color: Colors.black),
@@ -290,7 +291,7 @@ class EverybookInfo extends StatelessWidget {
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,
                                   itemCount: 5,
-                                  itemSize: 25,
+                                  itemSize: 20,
                                   itemBuilder: (context, snapshot) => Icon(
                                     Icons.star,
                                     color: Colors.amber,

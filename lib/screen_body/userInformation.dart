@@ -15,7 +15,9 @@ class _UserInformationState extends State<UserInformation> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      // resizeToAvoridBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text("User Information"),
       ),
       body: SafeArea(
@@ -56,7 +58,29 @@ class _UserInformationState extends State<UserInformation> {
                             "User Name",
                             style: TextStyle(color: Colors.black),
                           ),
-                          subtitle: Text("${snapshot.data['userName']}"),
+                          subtitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${snapshot.data['userName']}"),
+                              Tooltip(
+                                message: 'Edit User Name',
+                                child: IconButton(
+                                    iconSize: 15,
+                                    icon: Icon(Icons.arrow_downward),
+                                    onPressed: () {
+                                      showBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return Wrap(
+                                              children: [
+                                                EditName(),
+                                              ],
+                                            );
+                                          });
+                                    }),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -75,6 +99,22 @@ class _UserInformationState extends State<UserInformation> {
                             style: TextStyle(color: Colors.black),
                           ),
                           subtitle: Text("${snapshot.data['userBio']}"),
+                          trailing: Tooltip(
+                            message: 'Edit your bio',
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.edit_attributes,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                showBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return Wrap(children: [EditBio()]);
+                                    });
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -123,5 +163,147 @@ class _UserInformationState extends State<UserInformation> {
         ),
       ),
     );
+  }
+}
+
+class EditName extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            Center(
+              child: TextField(
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black, backgroundColor: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                  hintText: "Enter your new name",
+                ),
+                onChanged: (value) {},
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  onTap: null,
+                ),
+                GestureDetector(
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Discard',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 50)
+          ],
+        ));
+  }
+}
+
+class EditBio extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+        // height: 200,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: TextField(
+                maxLines: null,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: Colors.black, backgroundColor: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Bio',
+                  border: OutlineInputBorder(),
+                  hintText: "Enter your Bio",
+                ),
+                onChanged: (value) {},
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  onTap: null,
+                ),
+                GestureDetector(
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Discard',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+            SizedBox(height: 20)
+          ],
+        ));
   }
 }
