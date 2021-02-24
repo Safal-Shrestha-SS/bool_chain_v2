@@ -62,7 +62,8 @@ class BookInfo extends StatelessWidget {
                         children: [Text('${books[index]}')],
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(height: 50)
                 ],
               ),
             ),

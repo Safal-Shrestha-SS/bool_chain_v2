@@ -138,17 +138,17 @@ class Navigation extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            leading: Icon(
-              Icons.attach_file,
-              color: Colors.black,
-            ),
-            title: Text(
-              "About Us",
-              style: TextStyle(color: Colors.black),
-            ),
-            onTap: () {},
-          ),
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.attach_file,
+          //     color: Colors.black,
+          //   ),
+          //   title: Text(
+          //     "About Us",
+          //     style: TextStyle(color: Colors.black),
+          //   ),
+          //   onTap: () {},
+          // ),
           ListTile(
             leading: Icon(
               Icons.transfer_within_a_station,
@@ -225,6 +225,7 @@ class Navigation extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 50)
         ],
       ),
     );

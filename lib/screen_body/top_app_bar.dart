@@ -1,5 +1,6 @@
 import 'package:bool_chain_v2/screens/chat.dart';
 import 'package:bool_chain_v2/screens/everyBook.dart';
+import 'package:bool_chain_v2/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,12 @@ class TopAppBar1 extends StatelessWidget {
             tooltip: 'Chat Room',
             onPressed: () {
               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ));
+              Navigator.pop(context);
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Chat()),
               );
@@ -59,7 +66,7 @@ class TopAppBar1 extends StatelessWidget {
         tabs: <Widget>[
           Tab(text: "Home"),
           Tab(
-            text: "inStock",
+            text: "Sponsor",
           )
         ],
       ),
@@ -127,7 +134,8 @@ class Search extends SearchDelegate<String> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
-    final ThemeData theme = Theme.of(context);
+    final ThemeData theme =
+        Theme.of(context).copyWith(primaryColor: Colors.lightBlue);
     assert(theme != null);
     return theme;
   }

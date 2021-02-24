@@ -1,11 +1,16 @@
+// import 'package:bool_chain_v2/screens/ad_screen.dart';
 import 'package:bool_chain_v2/screens/ad_screen.dart';
 import 'package:bool_chain_v2/screens/everyBook.dart';
+import 'package:bool_chain_v2/services/ad_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bool_chain_v2/screen_body/top_app_bar.dart';
 import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+BannerAd bannerAd;
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -14,6 +19,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ams = AdManager();
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+    // AdManager.show();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -148,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -159,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            Container()
+            AdScreen()
           ]),
         ),
       ),

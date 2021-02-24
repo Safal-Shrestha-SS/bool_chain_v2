@@ -111,12 +111,30 @@ class _LogInPageState extends State<LogInPage> {
                             });
                             try {
                               await fire.signIn(email, password);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
-                                ),
-                              );
+                              bool go = await fire.isEmailVerified();
+                              if (go == true) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
+                              } else {
+                                await fire.signOut();
+
+                                setState(() {
+                                  spinner = false;
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text("Error: Email not verified"),
+                                    action: SnackBarAction(
+                                      label: 'OK',
+                                      onPressed: () {
+                                        // Some code to undo the change.
+                                      },
+                                    ),
+                                  ));
+                                });
+                              }
                             } catch (e) {
                               setState(() {
                                 _error = e.message;

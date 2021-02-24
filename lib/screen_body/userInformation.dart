@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'navigation_sidebar.dart';
 
 final _firestore = Firestore.instance;
+var id;
 
 class UserInformation extends StatefulWidget {
   UserInformation(userUID);
@@ -33,6 +34,7 @@ class _UserInformationState extends State<UserInformation> {
                   child: CircularProgressIndicator(),
                 );
               }
+              id = snapshot.data['userId'];
               GeoPoint position = snapshot.data["userGeoCode"];
               return Column(
                 children: [
@@ -66,7 +68,7 @@ class _UserInformationState extends State<UserInformation> {
                                 message: 'Edit User Name',
                                 child: IconButton(
                                     iconSize: 15,
-                                    icon: Icon(Icons.arrow_downward),
+                                    icon: Icon(Icons.mode_edit),
                                     onPressed: () {
                                       showBottomSheet(
                                           context: context,
@@ -102,8 +104,9 @@ class _UserInformationState extends State<UserInformation> {
                           trailing: Tooltip(
                             message: 'Edit your bio',
                             child: IconButton(
+                              iconSize: 15,
                               icon: Icon(
-                                Icons.edit_attributes,
+                                Icons.mode_edit,
                                 color: Colors.black,
                               ),
                               onPressed: () {
@@ -169,6 +172,8 @@ class _UserInformationState extends State<UserInformation> {
 class EditName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var newUserName;
+
     return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -181,7 +186,7 @@ class EditName extends StatelessWidget {
             Center(
               child: TextField(
                 maxLines: 1,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 style: TextStyle(
                     color: Colors.black, backgroundColor: Colors.white),
                 decoration: InputDecoration(
@@ -191,7 +196,9 @@ class EditName extends StatelessWidget {
                   border: OutlineInputBorder(),
                   hintText: "Enter your new name",
                 ),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  newUserName = value;
+                },
               ),
             ),
             SizedBox(
@@ -211,7 +218,13 @@ class EditName extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onTap: null,
+                  onTap: () {
+                    _firestore
+                        .collection('users')
+                        .document(id)
+                        .updateData({'userName': newUserName});
+                    Navigator.pop(context);
+                  },
                 ),
                 GestureDetector(
                   child: Container(
@@ -230,7 +243,6 @@ class EditName extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 50)
           ],
         ));
   }
@@ -239,6 +251,7 @@ class EditName extends StatelessWidget {
 class EditBio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var userBio;
     return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -263,7 +276,9 @@ class EditBio extends StatelessWidget {
                   border: OutlineInputBorder(),
                   hintText: "Enter your Bio",
                 ),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  userBio = value;
+                },
               ),
             ),
             SizedBox(
@@ -283,7 +298,13 @@ class EditBio extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onTap: null,
+                  onTap: () {
+                    _firestore
+                        .collection('users')
+                        .document(id)
+                        .updateData({'userBio': userBio});
+                    Navigator.pop(context);
+                  },
                 ),
                 GestureDetector(
                   child: Container(
@@ -302,7 +323,6 @@ class EditBio extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: 20)
           ],
         ));
   }

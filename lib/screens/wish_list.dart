@@ -65,30 +65,21 @@ class WishList extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: FlatButton(
-                                        child: Image.network(document['image']),
-                                        onPressed: () {
-                                          var bookId = document.documentID;
-                                          Navigator.of(context).push(
-                                            PageRouteBuilder(
-                                              pageBuilder: (context, animation,
-                                                      secondaryAnimation) =>
-                                                  EverybookInfo(bookId),
-                                              transitionDuration:
-                                                  Duration(milliseconds: 500),
-                                              transitionsBuilder: (context,
-                                                  animation,
-                                                  secondaryAnimation,
-                                                  _) {
-                                                return ScaleTransition(
-                                                  scale: animation,
-                                                  alignment: Alignment.center,
-                                                  child: _,
-                                                );
-                                              },
-                                            ),
-                                          );
-                                        }),
+                                    child: Hero(
+                                      tag: document.documentID,
+                                      child: FlatButton(
+                                          child:
+                                              Image.network(document['image']),
+                                          onPressed: () {
+                                            var bookId = document.documentID;
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EverybookInfo(bookId)),
+                                            );
+                                          }),
+                                    ),
                                   ),
                                   Expanded(
                                     child: Container(
@@ -129,7 +120,57 @@ class WishList extends StatelessWidget {
                                                   style:
                                                       TextStyle(fontSize: 11),
                                                 ),
-                                                onPressed: () async {},
+                                                onPressed: () async {
+                                                  List<DocumentSnapshot>
+                                                      documentList;
+                                                  List f = new List();
+                                                  f.add(userUID);
+                                                  f.add(document['bookOwner']);
+                                                  documentList =
+                                                      (await Firestore.instance
+                                                              .collection(
+                                                                  'group')
+                                                              .where('member0',
+                                                                  whereIn: f)
+                                                              .getDocuments())
+                                                          .documents;
+                                                  documentList
+                                                      .asMap()
+                                                      .forEach((key, value) {
+                                                    if (value.data['member1'] ==
+                                                            f[0] ||
+                                                        value.data['member1'] ==
+                                                            f[1]) {
+                                                      Firestore.instance
+                                                          .collection('group')
+                                                          .document(
+                                                              value.documentID)
+                                                          .delete();
+                                                      Firestore.instance
+                                                          .collection('message')
+                                                          .document(
+                                                              value.documentID)
+                                                          .delete();
+                                                    }
+                                                  });
+                                                  Firestore.instance
+                                                      .collection('books')
+                                                      .document(
+                                                          document.documentID)
+                                                      .updateData({
+                                                    'bookOwner': userUID
+                                                  });
+
+                                                  Firestore.instance
+                                                      .collection('users')
+                                                      .document(userUID)
+                                                      .updateData({
+                                                    'wishList':
+                                                        FieldValue.arrayRemove([
+                                                      document.documentID
+                                                    ])
+                                                  });
+                                                },
                                               ),
                                             ),
                                           ),
@@ -144,7 +185,49 @@ class WishList extends StatelessWidget {
                                                   style:
                                                       TextStyle(fontSize: 11),
                                                 ),
-                                                onPressed: () async {},
+                                                onPressed: () async {
+                                                  List<DocumentSnapshot>
+                                                      documentList;
+                                                  List f = new List();
+                                                  f.add(userUID);
+                                                  f.add(document['bookOwner']);
+                                                  documentList =
+                                                      (await Firestore.instance
+                                                              .collection(
+                                                                  'group')
+                                                              .where('member0',
+                                                                  whereIn: f)
+                                                              .getDocuments())
+                                                          .documents;
+                                                  documentList
+                                                      .asMap()
+                                                      .forEach((key, value) {
+                                                    if (value.data['member1'] ==
+                                                            f[0] ||
+                                                        value.data['member1'] ==
+                                                            f[1]) {
+                                                      Firestore.instance
+                                                          .collection('group')
+                                                          .document(
+                                                              value.documentID)
+                                                          .delete();
+                                                      Firestore.instance
+                                                          .collection('message')
+                                                          .document(
+                                                              value.documentID)
+                                                          .delete();
+                                                      Firestore.instance
+                                                          .collection('users')
+                                                          .document(userUID)
+                                                          .updateData({
+                                                        'wishList': FieldValue
+                                                            .arrayRemove([
+                                                          document.documentID
+                                                        ])
+                                                      });
+                                                    }
+                                                  });
+                                                },
                                               ),
                                             ),
                                           ),

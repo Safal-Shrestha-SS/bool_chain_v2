@@ -95,7 +95,7 @@ class EverybookInfo extends StatelessWidget {
                                           .document(g)
                                           .get()
                                           .then((value) => check =
-                                              value.data['noOfBookRequesting']);
+                                              value.data['wishList'].length);
                                       var id = '2';
                                       // int exist;
                                       List<DocumentSnapshot> documentList;
@@ -129,7 +129,7 @@ class EverybookInfo extends StatelessWidget {
                                           ),
                                         );
                                       }
-                                      if (check < 5) {
+                                      if (check < 3) {
                                         if (id == '2') {
                                           await _bookStore
                                               .collection('group')

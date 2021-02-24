@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/material.dart';
+
 class AdManager {
   static String get appId {
     if (Platform.isAndroid) {
@@ -41,5 +44,25 @@ class AdManager {
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
+  }
+
+  static BannerAd _bannerAd;
+
+  static BannerAd _getbannerAD() {
+    return BannerAd(adUnitId: bannerAdUnitId, size: AdSize.smartBanner);
+  }
+
+  static void show() {
+    if (_bannerAd = null) _bannerAd = _getbannerAD();
+    _bannerAd
+      ..load()
+      ..show(
+          anchorType: AnchorType.bottom,
+          anchorOffset: kBottomNavigationBarHeight);
+  }
+
+  static void hide() async {
+    await _bannerAd.dispose();
+    _bannerAd = null;
   }
 }
