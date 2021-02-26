@@ -159,6 +159,9 @@ class _UserInformationState extends State<UserInformation> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 50,
+                  )
                 ],
               );
             },
@@ -243,6 +246,9 @@ class EditName extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(
+              height: 50,
+            )
           ],
         ));
   }
@@ -323,6 +329,9 @@ class EditBio extends StatelessWidget {
                 )
               ],
             ),
+            SizedBox(
+              height: 50,
+            )
           ],
         ));
   }

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter/material.dart';
 
 class AdManager {
   static String get appId {
@@ -53,16 +52,16 @@ class AdManager {
   }
 
   static void show() {
-    if (_bannerAd = null) _bannerAd = _getbannerAD();
+    if (_bannerAd == null) _bannerAd = _getbannerAD();
     _bannerAd
       ..load()
       ..show(
-          anchorType: AnchorType.bottom,
-          anchorOffset: kBottomNavigationBarHeight);
+        anchorType: AnchorType.bottom,
+      );
   }
 
   static void hide() async {
-    await _bannerAd.dispose();
+    if (_bannerAd != null) await _bannerAd.dispose();
     _bannerAd = null;
   }
 }

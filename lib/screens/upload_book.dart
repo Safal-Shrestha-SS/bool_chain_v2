@@ -332,6 +332,9 @@ class _UploadBookState extends State<UploadBook> {
                                 }
                               }
                             }),
+                        SizedBox(
+                          height: 50,
+                        )
                       ],
                     ),
                     ((image.inProgress)

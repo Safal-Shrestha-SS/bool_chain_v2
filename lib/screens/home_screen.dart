@@ -1,6 +1,6 @@
 // import 'package:bool_chain_v2/screens/ad_screen.dart';
 import 'package:bool_chain_v2/screens/everyBook.dart';
-// import 'package:bool_chain_v2/services/ad_manager.dart';
+import 'package:bool_chain_v2/services/ad_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final ams = AdManager();
+  final ams = AdManager();
   @override
   void dispose() {
     super.dispose();
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-    // AdManager.show();
+    AdManager.show();
     super.initState();
   }
 
@@ -55,123 +55,134 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return Container(
-                    child: ListView(
-                      children: snapshot.data.documents.map((document) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(35.0),
-                                bottomRight: Radius.circular(35.0)),
-                          ),
-                          elevation: 8.0,
-                          margin: new EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Colors.blue,
-                                    Colors.lightBlueAccent
-                                  ]),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(35.0),
-                                  bottomRight: Radius.circular(35.0)),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  child: GestureDetector(
-                                      child: Hero(
-                                          tag: document.documentID,
-                                          child: Image.network(
-                                            document['image'],
-                                          )),
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          // BuildContext context,
-                                          MaterialPageRoute(
-                                            builder: (context) => EverybookInfo(
-                                                document.documentID),
-                                          ),
-                                        );
-                                      }),
-                                )),
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.all(7.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          document["bookName"],
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text("Author",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black)),
-                                        Text(document['bookAuthor'],
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.black)),
-                                        SizedBox(
-                                          height: 30,
-                                        ),
-                                        Text(
-                                          "Rating",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            RatingBar.builder(
-                                              onRatingUpdate: null,
-                                              ignoreGestures: true,
-                                              initialRating:
-                                                  document['bookRating'],
-                                              minRating: 0,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemSize: 25,
-                                              itemBuilder:
-                                                  (context, snapshot) => Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: ListView(
+                            children: snapshot.data.documents.map((document) {
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(35.0),
+                                      bottomRight: Radius.circular(35.0)),
+                                ),
+                                elevation: 8.0,
+                                margin: new EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 10.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Colors.blue,
+                                          Colors.lightBlueAccent
+                                        ]),
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(35.0),
+                                        bottomRight: Radius.circular(35.0)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 8),
+                                        child: GestureDetector(
+                                            child: Hero(
+                                                tag: document.documentID,
+                                                child: Image.network(
+                                                  document['image'],
+                                                )),
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                // BuildContext context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EverybookInfo(
+                                                          document.documentID),
+                                                ),
+                                              );
+                                            }),
+                                      )),
+                                      Expanded(
+                                        child: Container(
+                                          padding: EdgeInsets.all(7.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                document["bookName"],
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text("Author",
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.black)),
+                                              Text(document['bookAuthor'],
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.black)),
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              Text(
+                                                "Rating",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  RatingBar.builder(
+                                                    onRatingUpdate: null,
+                                                    ignoreGestures: true,
+                                                    initialRating:
+                                                        document['bookRating'],
+                                                    minRating: 0,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 25,
+                                                    itemBuilder:
+                                                        (context, snapshot) =>
+                                                            Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
-                    ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      )
+                    ],
                   );
                 },
               ),

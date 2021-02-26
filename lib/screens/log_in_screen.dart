@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'home_screen.dart';
 import 'package:bool_chain_v2/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:bool_chain_v2/services/ad_manager.dart';
 
 class LogInPage extends StatefulWidget {
   static const String id = 'login_screen';
@@ -20,6 +21,11 @@ class _LogInPageState extends State<LogInPage> {
   String email, password;
   bool spinner = false;
   String _error;
+  @override
+  void initState() {
+    super.initState();
+    AdManager.hide();
+  }
 
   @override
   Widget build(BuildContext context) {

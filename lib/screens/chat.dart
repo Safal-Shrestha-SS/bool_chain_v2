@@ -1,3 +1,4 @@
+import 'package:bool_chain_v2/services/ad_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,12 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   final _auth = FirebaseAuth.instance;
+  final ams = AdManager();
 
   @override
   void initState() {
     super.initState();
+    AdManager.hide();
     getCurrentUser();
   }
 
@@ -64,7 +67,7 @@ class ChatStream extends StatelessWidget {
     return StreamBuilder(
         stream: Firestore.instance
             .collection('group')
-            .orderBy('lastModified', descending: false)
+            .orderBy('lastModified', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -94,12 +97,10 @@ class ChatStream extends StatelessWidget {
               messageBubbles.add(messageBubble);
             }
           }
-          return Expanded(
-            child: ListView(
-              reverse: false,
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
-              children: messageBubbles,
-            ),
+          return ListView(
+            reverse: false,
+            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
+            children: messageBubbles,
           );
         });
   }

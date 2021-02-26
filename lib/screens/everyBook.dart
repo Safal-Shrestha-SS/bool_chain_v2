@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:bool_chain_v2/services/ad_manager.dart';
 
 var _bookStore = Firestore.instance;
 var g;
@@ -32,6 +33,7 @@ class EverybookInfo extends StatelessWidget {
       body: StreamBuilder<DocumentSnapshot>(
         stream: _bookStore.collection("books").document(bookId).snapshots(),
         builder: (BuildContext context, snapshot) {
+          if (!snapshot.hasData) return CircularProgressIndicator();
           final Timestamp timestamp = snapshot.data['time'] as Timestamp;
           final DateTime dateTime = timestamp.toDate();
           final date = [dateTime.day, dateTime.month, dateTime.year];
@@ -95,7 +97,10 @@ class EverybookInfo extends StatelessWidget {
                                           .document(g)
                                           .get()
                                           .then((value) => check =
-                                              value.data['wishList'].length);
+                                              value.data['wishList'] == null
+                                                  ? 0
+                                                  : value
+                                                      .data['wishList'].length);
                                       var id = '2';
                                       // int exist;
                                       List<DocumentSnapshot> documentList;
@@ -120,14 +125,17 @@ class EverybookInfo extends StatelessWidget {
                                         }
                                       });
                                       if (id != '2') {
-                                        Navigator.of(context).push(
-                                          // BuildContext context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ChatScreen(
-                                              messageId: id,
-                                            ),
-                                          ),
-                                        );
+                                        Navigator.of(context)
+                                            .push(
+                                              // BuildContext context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChatScreen(
+                                                  messageId: id,
+                                                ),
+                                              ),
+                                            )
+                                            .then((value) => AdManager.show());
                                       }
                                       if (check < 3) {
                                         if (id == '2') {
@@ -178,14 +186,18 @@ class EverybookInfo extends StatelessWidget {
                                             'wishList': FieldValue.arrayUnion(
                                                 [snapshot.data.documentID])
                                           });
-                                          Navigator.of(context).push(
-                                            // BuildContext context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                messageId: id,
-                                              ),
-                                            ),
-                                          );
+                                          Navigator.of(context)
+                                              .push(
+                                                // BuildContext context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                    messageId: id,
+                                                  ),
+                                                ),
+                                              )
+                                              .then(
+                                                  (value) => AdManager.show());
                                         }
                                       } else {
                                         Scaffold.of(context).showSnackBar(SnackBar(
@@ -310,6 +322,9 @@ class EverybookInfo extends StatelessWidget {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 50,
+                    )
                   ],
                 ),
               ],

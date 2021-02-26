@@ -1,3 +1,4 @@
+import 'package:bool_chain_v2/services/ad_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,10 +19,13 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
+  final ams = AdManager();
+
   String messageText;
   @override
   void initState() {
     super.initState();
+    AdManager.hide();
     getCurrentUser();
   }
 

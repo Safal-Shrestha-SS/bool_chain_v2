@@ -1,6 +1,6 @@
 import 'package:bool_chain_v2/screens/chat.dart';
 import 'package:bool_chain_v2/screens/everyBook.dart';
-import 'package:bool_chain_v2/screens/home_screen.dart';
+import 'package:bool_chain_v2/services/ad_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -49,15 +49,9 @@ class TopAppBar1 extends StatelessWidget {
             tooltip: 'Chat Room',
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ));
-              Navigator.pop(context);
-              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Chat()),
-              );
+              ).then((value) => AdManager.show());
             },
           ),
         ],
