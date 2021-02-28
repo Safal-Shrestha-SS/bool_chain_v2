@@ -140,12 +140,6 @@ class EverybookInfo extends StatelessWidget {
                                           id = value.documentID;
                                         }
                                       });
-                                      Scaffold.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            'Book is ${distance / 1000} km away'),
-                                        duration: Duration(seconds: 1),
-                                      ));
 
                                       if (id != '2') {
                                         Navigator.of(context)

@@ -37,7 +37,7 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     print('safal');
-
+    AdManager.hide();
     return Scaffold(
         appBar: AppBar(
           leading: null,
