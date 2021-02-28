@@ -19,4 +19,10 @@ class FireStorageService {
     var downloadURL = await (await _uploadTask.onComplete).ref.getDownloadURL();
     return downloadURL.toString();
   }
+
+  void deletePhoto(String url) async {
+    StorageReference a = await _storage.getReferenceFromUrl(url);
+
+    a.delete();
+  }
 }

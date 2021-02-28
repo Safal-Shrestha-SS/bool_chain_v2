@@ -2,6 +2,9 @@ import 'package:bool_chain_v2/screen_body/navigation_sidebar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'everyBook.dart';
+import 'package:bool_chain_v2/services/firestorage.dart';
+
+FireStorageService storageService = FireStorageService();
 
 class MyBook extends StatelessWidget {
   @override
@@ -137,7 +140,13 @@ class _MessageState extends State<Message> {
                     FlatButton(
                       color: Colors.white,
                       child: Text("Delete"),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await Firestore.instance
+                            .collection('books')
+                            .document(widget.bookId)
+                            .delete();
+                        storageService.deletePhoto(widget.bookImage);
+                      },
                     ),
                   ],
                 ),
