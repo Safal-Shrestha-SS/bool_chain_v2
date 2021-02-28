@@ -7,10 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:bool_chain_v2/services/ad_manager.dart';
+import 'package:bool_chain_v2/services/geolocation_service.dart';
 
 var _bookStore = Firestore.instance;
 var g;
 var n;
+var distance = 0.0;
 
 class EverybookInfo extends StatelessWidget {
   final String bookId;
@@ -19,6 +21,7 @@ class EverybookInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var a = Provider.of<FirebaseAuthService>(context);
+    GeoLocationService locationService = GeoLocationService();
     void getuserID() async {
       var h = await a.getCurrentUser();
       g = h.uid;
@@ -27,7 +30,19 @@ class EverybookInfo extends StatelessWidget {
       print(g);
     }
 
+    Future<void> location(String co) async {
+      GeoPoint f1 = (await _bookStore.collection('users').document(g).get())
+          .data["userGeoCode"];
+      GeoPoint f2 = (await _bookStore.collection('users').document(co).get())
+          .data["userGeoCode"];
+      distance = await locationService.distanceBetweenCoordintaes(f1, f2);
+      print('edjfkf');
+      print(co);
+      print(distance);
+    }
+
     getuserID();
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.blue, title: Text("Book Info")),
       body: StreamBuilder<DocumentSnapshot>(
@@ -40,6 +55,7 @@ class EverybookInfo extends StatelessWidget {
           final bookOwner = snapshot.data['bookOwner'];
           final genres = snapshot.data['genres'];
           print(genres);
+
           return SingleChildScrollView(
               child: SafeArea(
             child: Column(
@@ -124,6 +140,13 @@ class EverybookInfo extends StatelessWidget {
                                           id = value.documentID;
                                         }
                                       });
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            'Book is ${distance / 1000} km away'),
+                                        duration: Duration(seconds: 1),
+                                      ));
+
                                       if (id != '2') {
                                         Navigator.of(context)
                                             .push(
@@ -137,6 +160,7 @@ class EverybookInfo extends StatelessWidget {
                                             )
                                             .then((value) => AdManager.show());
                                       }
+
                                       if (check < 3) {
                                         if (id == '2') {
                                           await _bookStore
@@ -213,6 +237,7 @@ class EverybookInfo extends StatelessWidget {
                       ),
                     ),
                     Wrap(
+                      alignment: WrapAlignment.start,
                       spacing: 8.0, // gap between adjacent chips
                       runSpacing: 4.0, // gap between lines
                       children: <Widget>[
@@ -226,13 +251,15 @@ class EverybookInfo extends StatelessWidget {
                                 ),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
-                            child:
-                                Row(mainAxisSize: MainAxisSize.min, children: [
-                              Text(
-                                '  $ip  ',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ]),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '  $ip  ',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                ]),
                           ),
                       ],
                     ),
@@ -322,6 +349,26 @@ class EverybookInfo extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if (bookOwner != g) ...[
+                      FutureBuilder(
+                          future: location(bookOwner),
+                          builder: (context, snapshot) {
+                            return Builder(
+                              builder: (context) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                      '$distance km away',
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                    ],
                     SizedBox(
                       height: 50,
                     )

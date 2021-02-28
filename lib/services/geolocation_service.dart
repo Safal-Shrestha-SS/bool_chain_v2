@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GeoLocationService {
@@ -33,7 +34,7 @@ class GeoLocationService {
     return address;
   }
 
-  Future<double> distanceBetweenCoordintaes(Position A, Position B) async {
+  Future<double> distanceBetweenCoordintaes(GeoPoint A, GeoPoint B) async {
     double distanceInMeters = await Geolocator()
         .distanceBetween(A.latitude, A.longitude, B.latitude, B.longitude);
     return distanceInMeters;

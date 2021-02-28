@@ -53,11 +53,11 @@ class AdManager {
 
   static void show() {
     if (_bannerAd == null) _bannerAd = _getbannerAD();
-    _bannerAd
-      ..load()
-      ..show(
-        anchorType: AnchorType.bottom,
-      );
+    // _bannerAd
+    //   ..load()
+    //   ..show(
+    //     anchorType: AnchorType.bottom,
+    //   );
   }
 
   static void hide() async {

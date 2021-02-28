@@ -14,9 +14,9 @@ class InitialLoadingScreen extends StatefulWidget {
 class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
   // FirebaseAuthService doublecheck = FirebaseAuthService();
   Future<bool> isLoggedIN() async {
-    if (await FirebaseAuth.instance.currentUser() != null)
+    if (await FirebaseAuth.instance.currentUser() != null) {
       return true;
-    else
+    } else
       return false;
   }
 
