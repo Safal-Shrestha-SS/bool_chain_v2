@@ -2,6 +2,7 @@
 import 'package:bool_chain_v2/screens/everyBook.dart';
 import 'package:bool_chain_v2/services/ad_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 // import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+
     AdManager.show();
     super.initState();
   }
@@ -43,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TopAppBar1(),
             ];
           },
-          body: TabBarView(physics: NeverScrollableScrollPhysics(), children: [
+          body: TabBarView(children: [
             Container(
               child: StreamBuilder(
                 stream: Firestore.instance.collection('books').snapshots(),

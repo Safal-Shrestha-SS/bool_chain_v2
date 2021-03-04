@@ -37,6 +37,6 @@ class GeoLocationService {
   Future<double> distanceBetweenCoordintaes(GeoPoint A, GeoPoint B) async {
     double distanceInMeters = await Geolocator()
         .distanceBetween(A.latitude, A.longitude, B.latitude, B.longitude);
-    return distanceInMeters;
+    return distanceInMeters / 1000;
   }
 }
